@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { CERTIFICADOS } from '../lib/data'
-import { gsap, prefersReducedMotion, ScrollTrigger } from '../lib/motion'
+import { gsap, prefersReducedMotion, ScrollTrigger, MOV } from '../lib/motion'
 
 // La rueda repite los certificados para llenar el círculo
 const VUELTAS = 3
@@ -127,7 +127,7 @@ export default function Certificados() {
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       const mm = gsap.matchMedia()
-      mm.add('(prefers-reduced-motion: no-preference)', () => {
+      mm.add(MOV(), () => {
         gsap.from('.cert-linea', {
           yPercent: 110,
           duration: 1,

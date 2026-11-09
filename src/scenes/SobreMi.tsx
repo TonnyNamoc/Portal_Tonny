@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef } from 'react'
 import { CIFRAS, SOBRE_MI } from '../lib/data'
-import { gsap } from '../lib/motion'
+import { gsap, MOV } from '../lib/motion'
 
 const ROTACION = [-4, 3, -2]
 
@@ -11,7 +11,7 @@ export default function SobreMi() {
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       const mm = gsap.matchMedia()
-      mm.add('(prefers-reduced-motion: no-preference)', () => {
+      mm.add(MOV(), () => {
         gsap.utils.toArray<HTMLElement>('.cifra').forEach((el) => {
           const fin = Number(el.dataset.valor)
           const desde = fin > 1000 ? fin - 40 : 0

@@ -1,7 +1,7 @@
 import { useLayoutEffect, useRef } from 'react'
 import ProyectoCard from '../components/ProyectoCard'
 import { CICLOS, PROYECTOS } from '../lib/data'
-import { gsap } from '../lib/motion'
+import { gsap, MOV, QUIETO } from '../lib/motion'
 
 /**
  * Escena 3 · noche. En escritorio se fija y el scroll vertical mueve el carril en horizontal,
@@ -14,7 +14,7 @@ export default function Proyectos() {
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       const mm = gsap.matchMedia()
-      mm.add('(min-width: 1024px) and (prefers-reduced-motion: no-preference)', () => {
+      mm.add(MOV('(min-width: 1024px)'), () => {
         const t = track.current!
         const distancia = () => t.scrollWidth - window.innerWidth
         const tl = gsap.timeline({
@@ -32,7 +32,7 @@ export default function Proyectos() {
           .fromTo('.proy-titulo', { xPercent: 0 }, { xPercent: -30 }, 0)
           .fromTo('.eje-marca', { left: '0%' }, { left: '100%' }, 0)
       })
-      mm.add('(max-width: 1023px), (prefers-reduced-motion: reduce)', () => {
+      mm.add(QUIETO('(max-width: 1023px)'), () => {
         gsap.utils.toArray<HTMLElement>('.proy-item').forEach((el) =>
           gsap.from(el, { y: 40, opacity: 0, duration: 0.9, ease: 'expo.out', scrollTrigger: { trigger: el, start: 'top 85%' } })
         )

@@ -389,15 +389,10 @@ button:focus-visible {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .flotar,
-  .cinta-track,
-  .marquee-track,
-  .panel-flota,
-  .scroll-hint {
+  html:not(.animar-forzado) :is(.flotar, .cinta-track, .marquee-track, .panel-flota, .scroll-hint) {
     animation: none;
   }
-  .roll > span,
-  .menu {
+  html:not(.animar-forzado) :is(.roll > span, .menu) {
     transition: none;
   }
 }
@@ -499,6 +494,12 @@ button:focus-visible {
   color: var(--pacifico-claro);
 }
 
+/* Botón para activar animaciones cuando el sistema las reduce */
+.animaciones-btn {
+  bottom: calc(max(20px, env(safe-area-inset-bottom, 0px)) + 44px);
+  color: var(--totora);
+}
+
 /* ---------- Progreso en el header ---------- */
 .seccion-label {
   display: inline-flex;
@@ -519,7 +520,7 @@ button:focus-visible {
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .seccion-label span {
+  html:not(.animar-forzado) .seccion-label span {
     animation: none;
   }
 }
@@ -535,7 +536,7 @@ button:focus-visible {
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .cert-titulo {
+  html:not(.animar-forzado) .cert-titulo {
     animation: none;
   }
 }

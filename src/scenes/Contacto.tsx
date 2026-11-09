@@ -3,7 +3,7 @@ import Monograma from '../components/Monograma'
 import RollLink from '../components/RollLink'
 import { CONTACTO, SECCIONES } from '../lib/data'
 import LogoMarquee from '../components/LogoMarquee'
-import { gsap, scrollToId } from '../lib/motion'
+import { gsap, scrollToId, MOV } from '../lib/motion'
 
 function Copiable({ valor, etiqueta }: { valor: string; etiqueta: string }) {
   const [ok, setOk] = useState(false)
@@ -33,7 +33,7 @@ export default function Contacto() {
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       const mm = gsap.matchMedia()
-      mm.add('(prefers-reduced-motion: no-preference)', () => {
+      mm.add(MOV(), () => {
         gsap.fromTo(
           root.current,
           { '--p': 0 },

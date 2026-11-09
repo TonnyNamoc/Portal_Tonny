@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef } from 'react'
 import { FRASE } from '../lib/data'
-import { gsap, ScrollTrigger } from '../lib/motion'
+import { gsap, ScrollTrigger, MOV } from '../lib/motion'
 
 const GLIFOS = '{}[]()<>/=;:$#&*+_01λ'
 
@@ -29,7 +29,7 @@ export default function Perfil() {
     if (!el) return
     const ctx = gsap.context(() => {
       const mm = gsap.matchMedia()
-      mm.add('(prefers-reduced-motion: no-preference)', () => {
+      mm.add(MOV(), () => {
         pintar(el, 0)
         const st = ScrollTrigger.create({
           trigger: root.current,

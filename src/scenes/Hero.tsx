@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useRef } from 'react'
-import { gsap, prefersReducedMotion, scrollToId } from '../lib/motion'
+import { gsap, prefersReducedMotion, scrollToId, MOV, QUIETO } from '../lib/motion'
 
 const VIDEO = { mp4: '/video/codigo.mp4', webm: '/video/codigo.webm', poster: '/video/codigo.jpg' }
 const FOTO = '/img/tonny.webp'
@@ -56,7 +56,7 @@ export default function Hero({ listo }: { listo: boolean }) {
     const ctx = gsap.context(() => {
       gsap.set(foto, { xPercent: -50, transformOrigin: `${(LENTE.cx / IMG.w) * 100}% ${(LENTE.cy / IMG.h) * 100}%` })
       const mm = gsap.matchMedia()
-      mm.add('(prefers-reduced-motion: no-preference)', () => {
+      mm.add(MOV(), () => {
         zoom.m = 0
         gsap
           .timeline({
@@ -78,7 +78,7 @@ export default function Hero({ listo }: { listo: boolean }) {
           .fromTo('.hero-side', { opacity: 0, y: 24 }, { opacity: 1, y: 0, stagger: 0.05, duration: 0.15 }, 0.8)
           .to({}, { duration: 0.1 })
       })
-      mm.add('(prefers-reduced-motion: reduce)', () => {
+      mm.add(QUIETO(), () => {
         zoom.m = 1
       })
     }, sec)
@@ -152,7 +152,7 @@ export default function Hero({ listo }: { listo: boolean }) {
       </div>
 
       {/* Textos satélite */}
-      <p className="hero-side eyebrow absolute left-0 top-[96px] max-w-[240px] gutter text-niebla normal-case tracking-[0.06em] leading-relaxed">
+      <p className="hero-side eyebrow absolute left-0 top-[96px] max-w-[360px] gutter text-niebla normal-case tracking-[0.06em] leading-relaxed">
         Desarrollador de software egresado de TECSUP. Convierto procesos reales de negocio en soluciones web y de datos.
       </p>
       <p className="hero-side eyebrow absolute right-0 top-[96px] hidden md:block gutter text-right text-niebla">

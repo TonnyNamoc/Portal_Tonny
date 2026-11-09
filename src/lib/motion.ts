@@ -12,8 +12,44 @@ export const EASE = {
   scrub: 'none',
 } as const
 
-export const prefersReducedMotion = () =>
+const CLAVE = 'tn-animaciones'
+
+/** true si el sistema del visitante pide reducir animaciones. */
+export const sistemaReduce = () =>
   typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+/** true si el visitante activó las animaciones a mano con el botón. */
+export const animacionesForzadas = () => {
+  try {
+    return localStorage.getItem(CLAVE) === 'on'
+  } catch {
+    return false
+  }
+}
+
+export const prefersReducedMotion = () => sistemaReduce() && !animacionesForzadas()
+
+/** Activa o vuelve a apagar las animaciones y recarga para aplicarlo en todas las escenas. */
+export function setAnimaciones(on: boolean) {
+  try {
+    if (on) localStorage.setItem(CLAVE, 'on')
+    else localStorage.removeItem(CLAVE)
+  } catch {
+    /* sin almacenamiento: no se puede recordar */
+  }
+  window.scrollTo(0, 0)
+  window.location.reload()
+}
+
+const reducir = prefersReducedMotion()
+if (typeof document !== 'undefined' && sistemaReduce() && !reducir) document.documentElement.classList.add('animar-forzado')
+
+/**
+ * Consultas para gsap.matchMedia que respetan el botón de animaciones.
+ * MOV(q) vale cuando hay movimiento (y se cumple q); QUIETO(q) cuando no hay movimiento (o se cumple q).
+ */
+export const MOV = (q = 'all') => (reducir ? 'not all' : q)
+export const QUIETO = (q = 'not all') => (reducir ? 'all' : q)
 
 let lenis: Lenis | null = null
 

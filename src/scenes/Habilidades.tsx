@@ -1,7 +1,7 @@
 import { useLayoutEffect, useRef, useState } from 'react'
 import { APRENDIENDO, HABILIDADES } from '../lib/data'
 import LogoMarquee from '../components/LogoMarquee'
-import { gsap } from '../lib/motion'
+import { gsap, MOV } from '../lib/motion'
 
 function Nivel({ n }: { n: number }) {
   return (
@@ -24,14 +24,14 @@ export default function Habilidades() {
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       const mm = gsap.matchMedia()
-      mm.add('(prefers-reduced-motion: no-preference)', () => {
+      mm.add(MOV(), () => {
         gsap.fromTo(
           root.current,
           { '--p': 0 },
           { '--p': 1, ease: 'none', scrollTrigger: { trigger: root.current, start: 'top bottom', end: 'top top', scrub: true } }
         )
       })
-      mm.add('(min-width: 1024px) and (prefers-reduced-motion: no-preference)', () => {
+      mm.add(MOV('(min-width: 1024px)'), () => {
         const items = gsap.utils.toArray<HTMLElement>('.hab-item')
         gsap.set(items.slice(1), { opacity: 0, scale: 0.85, filter: 'blur(14px)' })
         const tl = gsap.timeline({

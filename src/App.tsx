@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import Loader from './components/Loader'
 import Header from './components/Header'
 import Terminal from './components/Terminal'
+import BotonAnimaciones from './components/BotonAnimaciones'
 import Hero from './scenes/Hero'
 import Perfil from './scenes/Perfil'
 import Proyectos from './scenes/Proyectos'
@@ -37,6 +38,7 @@ export default function App() {
         <Contacto />
       </main>
       <Terminal />
+      <BotonAnimaciones />
     </>
   )
 }
