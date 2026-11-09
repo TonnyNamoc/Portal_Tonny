@@ -83,7 +83,7 @@ export default function Contacto() {
         </aside>
 
         <div className="grid content-center gap-10 lg:pl-10">
-          <span className="eyebrow text-niebla">Escena 06 · Contacto</span>
+          <span className="eyebrow text-niebla">Escena 07 · Contacto</span>
           <h2 className="display text-[clamp(72px,17vw,260px)] text-cal">
             <span className="sr-only">{palabra}</span>
             <span aria-hidden="true" className="inline-flex overflow-hidden">

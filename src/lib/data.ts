@@ -6,6 +6,7 @@ export const SECCIONES = [
   { id: 'proyectos', label: 'Proyectos' },
   { id: 'habilidades', label: 'Habilidades' },
   { id: 'sobre-mi', label: 'Sobre mí' },
+  { id: 'certificados', label: 'Certificados' },
   { id: 'contacto', label: 'Contacto' },
 ]
 
@@ -96,6 +97,23 @@ export const CIFRAS = [
   { valor: 4, etiqueta: 'Proyectos' },
   { valor: 4, etiqueta: 'Cursos' },
   { valor: 2023, etiqueta: 'Desde' },
+]
+
+export interface Certificado {
+  titulo: string
+  emisor: string
+  modalidad: string
+  fecha: string
+  horas: number
+  img: string
+  pdf: string
+}
+
+export const CERTIFICADOS: Certificado[] = [
+  { titulo: 'Introducción a la Nube', emisor: 'Platzi', modalidad: 'Online', fecha: '26 sep 2026', horas: 20, img: '/certificados/nube.webp', pdf: '/certificados/nube.pdf' },
+  { titulo: 'Análisis y Modelado de Datos con DAX y Power BI', emisor: 'Platzi', modalidad: 'Online', fecha: '8 oct 2026', horas: 19, img: '/certificados/power-bi-dax.webp', pdf: '/certificados/power-bi-dax.pdf' },
+  { titulo: 'Claude Code para Programadores', emisor: 'Platzi', modalidad: 'En vivo', fecha: '11 oct 2026', horas: 3, img: '/certificados/claude-code.webp', pdf: '/certificados/claude-code.pdf' },
+  { titulo: 'Introducción a AWS: Fundamentos del Cloud Computing', emisor: 'Platzi', modalidad: 'Online', fecha: '15 oct 2026', horas: 14, img: '/certificados/aws.webp', pdf: '/certificados/aws.pdf' },
 ]
 
 export const CONTACTO = {

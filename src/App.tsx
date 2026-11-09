@@ -7,6 +7,7 @@ import Perfil from './scenes/Perfil'
 import Proyectos from './scenes/Proyectos'
 import Habilidades from './scenes/Habilidades'
 import SobreMi from './scenes/SobreMi'
+import Certificados from './scenes/Certificados'
 import Contacto from './scenes/Contacto'
 import { ScrollTrigger, startSmoothScroll } from './lib/motion'
 
@@ -32,6 +33,7 @@ export default function App() {
         <Proyectos />
         <Habilidades />
         <SobreMi />
+        <Certificados />
         <Contacto />
       </main>
       <Terminal />

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { APRENDIENDO, CONTACTO, HABILIDADES, PROYECTOS, SECCIONES } from '../lib/data'
+import { APRENDIENDO, CERTIFICADOS, CONTACTO, HABILIDADES, PROYECTOS, SECCIONES } from '../lib/data'
 import { gsap, prefersReducedMotion, scrollToId, stopScroll } from '../lib/motion'
 
 type Linea = { texto: string; tipo?: 'cmd' | 'err' | 'ok' | 'dim' }
@@ -15,6 +15,7 @@ const AYUDA = `Comandos:
   proyectos      lista de proyectos
   stack          tecnologías y nivel
   aprendiendo    lo que estoy estudiando
+  certificados   cursos aprobados
   contacto       correo y teléfono
   cv             descarga mi CV
   ir <sección>   ${SECCIONES.map((s) => s.id).join(' · ')}
@@ -44,6 +45,8 @@ function ejecutar(entrada: string, cerrar: () => void): Linea[] | 'clear' {
       }))
     case 'stack':
       return HABILIDADES.map((h) => ({ texto: `${h.nombre.padEnd(12)} ${'■'.repeat(h.nivel)}${'□'.repeat(5 - h.nivel)}  ${h.categoria}` }))
+    case 'certificados':
+      return CERTIFICADOS.map((c) => ({ texto: `${c.fecha.padEnd(12)} ${String(c.horas).padStart(2)} h  ${c.titulo}  · ${c.emisor}` }))
     case 'aprendiendo':
       return [{ texto: APRENDIENDO.join(' · ') }]
     case 'contacto':
