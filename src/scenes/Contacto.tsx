@@ -109,6 +109,9 @@ export default function Contacto() {
             <a className="btn btn-ghost text-cal" href={CONTACTO.cv} download>
               Descargar CV
             </a>
+            <a className="btn btn-ghost text-cal" href={CONTACTO.linkedin} target="_blank" rel="noreferrer">
+              LinkedIn
+            </a>
           </div>
         </div>
       </div>

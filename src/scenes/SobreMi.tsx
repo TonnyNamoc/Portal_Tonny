@@ -70,7 +70,7 @@ export default function SobreMi() {
           </h2>
           <p className="max-w-[56ch] text-lg" style={{ color: 'var(--adobe-tinta)' }}>
             Orientado al detalle, comprometido con la calidad y con capacidad para adaptarme a distintos entornos de trabajo.
-            Me formo en TECSUP mientras construyo proyectos web y de escritorio.
+            Egresé de TECSUP y construyo proyectos web, de datos y en la nube. Mi trabajo en producción, reparto y atención al cliente me enseñó a entender procesos reales de negocio.
           </p>
         </div>
 

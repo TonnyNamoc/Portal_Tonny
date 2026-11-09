@@ -46,7 +46,7 @@ export default function ProyectoCard({ p, delay = 0 }: { p: Proyecto; delay?: nu
         )}
         <div className="relative z-[3] grid gap-3 [text-shadow:0_2px_12px_rgba(0,0,0,0.85)]">
           <span className="eyebrow text-pacifico-claro" style={{ color: 'var(--pacifico-claro)' }}>
-            Ciclo {p.ciclo}
+            {p.ciclo}
           </span>
           <h3 className="display text-[34px] text-cal">{p.titulo}</h3>
           <p className="text-sm text-niebla">{p.curso}</p>

@@ -64,8 +64,8 @@ export default function Proyectos() {
             </span>
           </h2>
           <p className="text-niebla">
-            Tres proyectos de mis ciclos en TECSUP. Su código no está disponible por ahora, así que van con cinta de peligro
-            hasta que suba los nuevos.
+            Proyectos académicos de TECSUP y una startup. Su código no está publicado por ahora, así que van con cinta de
+            peligro hasta que los suba.
           </p>
         </div>
 

@@ -153,7 +153,7 @@ export default function Hero({ listo }: { listo: boolean }) {
 
       {/* Textos satélite */}
       <p className="hero-side eyebrow absolute left-0 top-[96px] max-w-[240px] gutter text-niebla normal-case tracking-[0.06em] leading-relaxed">
-        Desarrollador de software en formación en TECSUP, creando experiencias web con calidad y propósito.
+        Desarrollador de software egresado de TECSUP. Convierto procesos reales de negocio en soluciones web y de datos.
       </p>
       <p className="hero-side eyebrow absolute right-0 top-[96px] hidden md:block gutter text-right text-niebla">
         Trujillo, Perú

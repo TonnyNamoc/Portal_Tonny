@@ -33,13 +33,13 @@ function ejecutar(entrada: string, cerrar: () => void): Linea[] | 'clear' {
     case 'whoami':
       return [
         { texto: `${CONTACTO.nombreCompleto}` , tipo: 'ok' },
-        { texto: 'Desarrollador de Software en formación en TECSUP (2023 — actualidad).' },
+        { texto: 'Desarrollador de Software, egresado de TECSUP (2023 — 2026), bachiller en trámite.' },
         { texto: 'Orientado al detalle y a construir proyectos de punta a punta.' },
       ]
     case 'proyectos':
     case 'ls':
       return PROYECTOS.map((p) => ({
-        texto: `${p.ciclo}  ${p.titulo.padEnd(24)} ${p.stack.join(', ')}${p.noEncontrado ? '   [404]' : ''}`,
+        texto: `${p.titulo.padEnd(24)} ${p.stack.join(', ')}${p.noEncontrado ? '   [404]' : ''}`,
         tipo: p.noEncontrado ? 'dim' : undefined,
       }))
     case 'stack':
@@ -51,6 +51,7 @@ function ejecutar(entrada: string, cerrar: () => void): Linea[] | 'clear' {
         { texto: `correo    ${CONTACTO.correo}` },
         { texto: `teléfono  ${CONTACTO.telefono}` },
         { texto: `ciudad    ${CONTACTO.ciudad}` },
+        { texto: `linkedin  ${CONTACTO.linkedin.replace('https://www.', '')}` },
       ]
     case 'cv': {
       const a = document.createElement('a')
