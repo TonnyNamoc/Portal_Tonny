@@ -1,55 +1,79 @@
-import { useLayoutEffect, useRef } from 'react'
-import { gsap } from '../lib/motion'
-import { scrollToId } from '../lib/motion'
-import HeroEditor from '../components/HeroEditor'
+import { useEffect, useLayoutEffect, useRef } from 'react'
+import { gsap, prefersReducedMotion, scrollToId } from '../lib/motion'
+
+const VIDEO = { mp4: '/video/codigo.mp4', webm: '/video/codigo.webm', poster: '/video/codigo.jpg' }
+
+function Video({ className }: { className?: string }) {
+  return (
+    <video className={`hero-video ${className ?? ''}`} autoPlay muted loop playsInline preload="auto" poster={VIDEO.poster} aria-hidden="true">
+      <source src={VIDEO.webm} type="video/webm" />
+      <source src={VIDEO.mp4} type="video/mp4" />
+    </video>
+  )
+}
+
+/** El nombre con la misma caja en ambas capas para que las letras coincidan al píxel. */
+function Nombre({ letras = false }: { letras?: boolean }) {
+  return (
+    <>
+      {['Tonny', 'Namoc'].map((palabra, w) => (
+        <span key={palabra} className="inline-flex overflow-hidden max-sm:flex max-sm:justify-center">
+          {palabra.split('').map((c, i) => (
+            <span key={i} className={`${letras ? 'hero-letra' : ''} inline-block`}>
+              {c}
+            </span>
+          ))}
+          {w === 0 && <span className="inline-block max-sm:hidden">&nbsp;</span>}
+        </span>
+      ))}
+    </>
+  )
+}
 
 /**
- * Escena 1 · adobe.
- * Arranca con un primer plano extremo de la pantalla con código y, al hacer scroll,
- * la cámara se aleja hasta el encuadre completo mientras entran nombre y textos.
+ * Escena 1 · noche.
+ * Un video de código escribiéndose de fondo, desenfocado bajo una capa casi negra, con el
+ * nombre encima. Al hacer scroll el fondo se apaga y el video queda dentro de las letras.
  */
 export default function Hero({ listo }: { listo: boolean }) {
   const root = useRef<HTMLElement>(null)
 
-  // Zoom out ligado al scroll
+  // Mantiene los dos videos sincronizados; con movimiento reducido se quedan en pausa
+  useEffect(() => {
+    const vids = Array.from(root.current!.querySelectorAll<HTMLVideoElement>('video'))
+    if (prefersReducedMotion()) {
+      vids.forEach((v) => v.pause())
+      return
+    }
+    const [a, b] = vids
+    const sync = () => {
+      if (Math.abs(a.currentTime - b.currentTime) > 0.15) b.currentTime = a.currentTime
+    }
+    a.addEventListener('seeked', sync)
+    const id = window.setInterval(sync, 2000)
+    return () => {
+      a.removeEventListener('seeked', sync)
+      window.clearInterval(id)
+    }
+  }, [])
+
+  // El video entra en las letras al hacer scroll
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       const mm = gsap.matchMedia()
       mm.add('(prefers-reduced-motion: no-preference)', () => {
-        const tl = gsap.timeline({
-          defaults: { ease: 'none' },
-          scrollTrigger: { trigger: root.current, start: 'top top', end: '+=130%', scrub: 0.6, pin: true, invalidateOnRefresh: true },
-        })
-        // Escala inicial calculada para que el editor siempre cubra toda la pantalla
-        // Punto de origen del zoom: arriba a la izquierda del editor, donde empieza el código
-        const OX = 0.35
-        const OY = 0.35
-        const cubrir = () => {
-          const f = root.current!.querySelector<HTMLElement>('.hero-frame')!
-          const r = f.getBoundingClientRect()
-          const w = f.offsetWidth
-          const h = f.offsetHeight
-          const L = r.left + (r.width - w) / 2
-          const T = r.top + (r.height - h) / 2
-          const vw = window.innerWidth
-          const vh = window.innerHeight
-          // Escala mínima para que, con ese origen, el editor cubra los cuatro bordes
-          const s = Math.max(
-            1 + L / (OX * w),
-            (vw - L - OX * w) / ((1 - OX) * w),
-            1 + T / (OY * h),
-            (vh - T - OY * h) / ((1 - OY) * h)
-          )
-          return s * 1.08
-        }
-        gsap.set('.hero-frame', { transformOrigin: `${OX * 100}% ${OY * 100}%` })
-        tl.fromTo('.hero-frame', { scale: cubrir }, { scale: 1 }, 0)
-          .fromTo('.hero-img', { scale: 1.25 }, { scale: 1 }, 0)
-          .fromTo('.hero-ghost', { yPercent: 18, opacity: 0.25 }, { yPercent: 0, opacity: 1 }, 0)
-          .fromTo('.hero-side', { opacity: 0, y: 24 }, { opacity: 1, y: 0, stagger: 0.08 }, 0.45)
-          .to('.scroll-hint-wrap', { opacity: 0, duration: 0.15 }, 0)
-          // Wipe diagonal: la noche entra cortando el adobe (esquinas a 1.2x y 1.8x)
-          .fromTo('.hero-wipe', { '--p': 0 }, { '--p': 1, duration: 0.45 }, 0.85)
+        gsap
+          .timeline({
+            defaults: { ease: 'none' },
+            scrollTrigger: { trigger: root.current, start: 'top top', end: '+=140%', scrub: 0.6, pin: true },
+          })
+          .to('.scroll-hint-wrap', { opacity: 0, duration: 0.1 }, 0)
+          .fromTo('.hero-calado', { opacity: 0 }, { opacity: 1, duration: 0.45 }, 0.05)
+          .fromTo('.hero-calado .hero-video', { scale: 1.35 }, { scale: 1, duration: 0.7 }, 0)
+          .to('.hero-nombre-solido', { opacity: 0, duration: 0.35 }, 0.1)
+          .to('.hero-fondo', { opacity: 0, duration: 0.45 }, 0.15)
+          .fromTo('.hero-nombre-caja', { scale: 1.06 }, { scale: 0.94, duration: 1 }, 0)
+          .fromTo('.hero-side', { opacity: 0, y: 24 }, { opacity: 1, y: 0, stagger: 0.08, duration: 0.3 }, 0.55)
       })
     }, root)
     return () => ctx.revert()
@@ -64,55 +88,63 @@ export default function Hero({ listo }: { listo: boolean }) {
     return () => ctx.revert()
   }, [listo])
 
-  const nombre = 'Tonny Namoc'
+  const tipografia = 'display text-center leading-[0.82] text-[clamp(64px,15vw,280px)] max-sm:text-[27vw]'
 
   return (
-    <section id="inicio" ref={root} className="mundo-adobe relative h-[100svh] min-h-[620px] overflow-hidden">
-      {/* Nombre calado de fondo */}
-      <div
-        className="hero-ghost display outline-text absolute inset-x-0 top-[9%] text-center text-adobe-sombra select-none pointer-events-none whitespace-nowrap text-[26vw] leading-[0.8]"
-        aria-hidden="true"
-      >
-        Trujillo
+    <section id="inicio" ref={root} className="mundo-noche relative h-[100svh] min-h-[560px] overflow-hidden">
+      {/* Fondo: video desenfocado bajo una capa casi negra */}
+      <div className="hero-fondo absolute inset-0" aria-hidden="true">
+        <Video className="scale-110 blur-[6px]" />
+        <div className="absolute inset-0" style={{ background: 'rgba(10,13,18,0.8)' }} />
       </div>
 
-      <div className="relative z-10 grid h-full place-items-center gutter">
-        <div className="hero-frame relative aspect-[4/3] w-[78vw] lg:aspect-[16/10] lg:w-[min(62vw,880px)] overflow-hidden rounded-[10px] shadow-[0_40px_80px_rgba(14,18,24,0.45)] origin-center">
-          <div className="hero-img h-full w-full">
-            <HeroEditor escribir={listo} />
+      <div className="hero-nombre-caja absolute inset-0">
+        {/* Capa calada: el video solo se ve dentro de las letras */}
+        <div className="hero-calado absolute inset-0 opacity-0 [isolation:isolate]" aria-hidden="true">
+          <Video />
+          <div className="absolute inset-0 grid place-items-center gutter bg-black text-white mix-blend-multiply">
+            <p className={tipografia}>
+              <Nombre />
+            </p>
           </div>
+          {/* Sube el negro al tono noche y da a las letras una base azul para que se lean */}
+          <div className="absolute inset-0 grid place-items-center gutter mix-blend-lighten" style={{ background: 'var(--noche)', color: '#1F3F9A' }}>
+            <p className={tipografia}>
+              <Nombre />
+            </p>
+          </div>
+        </div>
+
+        {/* Nombre sólido del inicio */}
+        <div className="absolute inset-0 grid place-items-center gutter">
+          <h1 className={`hero-nombre-solido text-cal ${tipografia}`}>
+            <span className="sr-only">Tonny Namoc</span>
+            <span aria-hidden="true">
+              <Nombre letras />
+            </span>
+          </h1>
         </div>
       </div>
 
       {/* Textos satélite */}
-      <p className="hero-side eyebrow absolute left-0 top-[96px] max-w-[240px] gutter text-adobe-tinta normal-case tracking-[0.06em] leading-relaxed">
+      <p className="hero-side eyebrow absolute left-0 top-[96px] max-w-[240px] gutter text-niebla normal-case tracking-[0.06em] leading-relaxed">
         Desarrollador de software en formación en TECSUP, creando experiencias web con calidad y propósito.
       </p>
-      <p className="hero-side eyebrow absolute right-0 top-[96px] hidden md:block gutter text-right text-adobe-tinta">
+      <p className="hero-side eyebrow absolute right-0 top-[96px] hidden md:block gutter text-right text-niebla">
         Trujillo, Perú
         <br />
         8.11° S · 79.03° O
       </p>
-
-      <h1 className="display absolute inset-x-0 bottom-[4%] z-20 gutter text-center text-cal mix-blend-difference text-[clamp(56px,13vw,210px)]">
-        <span className="sr-only">{nombre}</span>
-        <span aria-hidden="true" className="inline-flex overflow-hidden">
-          {nombre.split('').map((c, i) => (
-            <span key={i} className="hero-letra inline-block whitespace-pre">
-              {c}
-            </span>
-          ))}
-        </span>
-      </h1>
+      <p className="hero-side eyebrow absolute inset-x-0 bottom-[12%] gutter text-center text-niebla">
+        Código · Diseño · Trujillo
+      </p>
 
       <button
-        className="scroll-hint-wrap absolute bottom-6 right-0 z-30 gutter hidden md:flex items-center gap-2 eyebrow text-adobe-tinta bg-transparent border-0 cursor-pointer"
+        className="scroll-hint-wrap absolute bottom-6 right-0 z-30 gutter hidden md:flex items-center gap-2 eyebrow text-niebla bg-transparent border-0 cursor-pointer"
         onClick={() => scrollToId('perfil')}
       >
         Scroll <span className="scroll-hint inline-block">↓</span>
       </button>
-
-      <div className="hero-wipe mundo-noche absolute inset-0 z-40 pointer-events-none" aria-hidden="true" />
     </section>
   )
 }
