@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useState } from 'react'
 import Loader from './components/Loader'
 import Header from './components/Header'
+import Cursor from './components/Cursor'
+import Terminal from './components/Terminal'
 import Hero from './scenes/Hero'
 import Perfil from './scenes/Perfil'
 import Proyectos from './scenes/Proyectos'
@@ -33,6 +35,8 @@ export default function App() {
         <SobreMi />
         <Contacto />
       </main>
+      <Terminal />
+      <Cursor />
     </>
   )
 }

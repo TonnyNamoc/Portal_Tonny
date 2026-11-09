@@ -10,6 +10,7 @@ function Copiable({ valor, etiqueta }: { valor: string; etiqueta: string }) {
   return (
     <button
       type="button"
+      data-cursor={ok ? '¡Listo!' : 'Copiar'}
       className="group grid justify-items-start gap-1 border-0 bg-transparent text-left cursor-pointer text-cal"
       onClick={() => {
         navigator.clipboard?.writeText(valor).then(() => {
@@ -103,10 +104,10 @@ export default function Contacto() {
             </div>
           </div>
           <div className="flex flex-wrap gap-3">
-            <a className="btn" href={`mailto:${CONTACTO.correo}`}>
+            <a className="btn" data-magnet href={`mailto:${CONTACTO.correo}`}>
               Escríbeme
             </a>
-            <a className="btn btn-ghost text-cal" href={CONTACTO.cv} download>
+            <a className="btn btn-ghost text-cal" data-magnet href={CONTACTO.cv} download>
               Descargar CV
             </a>
           </div>

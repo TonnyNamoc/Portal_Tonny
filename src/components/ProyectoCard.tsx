@@ -26,6 +26,7 @@ export default function ProyectoCard({ p, delay = 0 }: { p: Proyecto; delay?: nu
         ref={ref}
         onPointerMove={onMove}
         onPointerLeave={onLeave}
+        data-cursor={p.noEncontrado ? "404" : "Ver"}
         className="proyecto grid aspect-[3/4] w-[min(82vw,380px)] content-end gap-3 p-6"
       >
         {p.noEncontrado && (

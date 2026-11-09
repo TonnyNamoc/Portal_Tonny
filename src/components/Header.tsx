@@ -7,6 +7,18 @@ import { ScrollTrigger, scrollToId, stopScroll } from '../lib/motion'
 export default function Header() {
   const [open, setOpen] = useState(false)
   const [activa, setActiva] = useState('inicio')
+  const [encendidos, setEncendidos] = useState(1)
+
+  // Progreso global: los escalones del monograma se encienden al bajar
+  useEffect(() => {
+    const st = ScrollTrigger.create({
+      trigger: document.documentElement,
+      start: 'top top',
+      end: 'bottom bottom',
+      onUpdate: (self) => setEncendidos(1 + Math.round(self.progress * 3)),
+    })
+    return () => st.kill()
+  }, [])
 
   // Sección activa según el scroll
   useEffect(() => {
@@ -28,6 +40,8 @@ export default function Header() {
     return () => window.removeEventListener('keydown', onKey)
   }, [open])
 
+  const indice = Math.max(0, SECCIONES.findIndex((s) => s.id === activa))
+
   const ir = (id: string) => (e: React.MouseEvent) => {
     e.preventDefault()
     setOpen(false)
@@ -39,10 +53,18 @@ export default function Header() {
     <>
       <header className="header gutter">
         <a href="#inicio" onClick={ir('inicio')} aria-label="Ir al inicio" className="justify-self-start">
-          <Monograma size={38} />
+          <Monograma size={38} encendidos={encendidos} />
         </a>
-        <span className="eyebrow hidden sm:block">Tonny Namoc</span>
+        <span className="eyebrow hidden sm:flex items-center gap-3" aria-live="polite">
+          <span className="tabular-nums">
+            {String(indice + 1).padStart(2, '0')} / {String(SECCIONES.length).padStart(2, '0')}
+          </span>
+          <span key={activa} className="seccion-label">
+            {SECCIONES[indice].label}
+          </span>
+        </span>
         <button
+          data-magnet
           className="burger"
           aria-label={open ? 'Cerrar menú' : 'Abrir menú'}
           aria-expanded={open}
