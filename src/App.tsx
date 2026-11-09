@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import Loader from './components/Loader'
 import Header from './components/Header'
-import Cursor from './components/Cursor'
 import Terminal from './components/Terminal'
 import Hero from './scenes/Hero'
 import Perfil from './scenes/Perfil'
@@ -36,7 +35,6 @@ export default function App() {
         <Contacto />
       </main>
       <Terminal />
-      <Cursor />
     </>
   )
 }

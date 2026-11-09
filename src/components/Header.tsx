@@ -64,7 +64,7 @@ export default function Header() {
           </span>
         </span>
         <button
-          data-magnet
+         
           className="burger"
           aria-label={open ? 'Cerrar menú' : 'Abrir menú'}
           aria-expanded={open}

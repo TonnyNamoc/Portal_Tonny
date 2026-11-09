@@ -143,7 +143,7 @@ export default function Terminal() {
 
   return (
     <>
-      <button className="terminal-btn" data-magnet onClick={() => setOpen((o) => !o)} aria-expanded={open} aria-controls="terminal">
+      <button className="terminal-btn" onClick={() => setOpen((o) => !o)} aria-expanded={open} aria-controls="terminal">
         <span>{'>_'}</span> Terminal <kbd>~</kbd>
       </button>
 
