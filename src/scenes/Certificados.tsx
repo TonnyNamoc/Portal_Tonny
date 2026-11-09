@@ -6,7 +6,7 @@ import { gsap, prefersReducedMotion, ScrollTrigger } from '../lib/motion'
 const VUELTAS = 3
 const RANURAS = CERTIFICADOS.length * VUELTAS
 const PASO = 360 / RANURAS
-const BASE = -6 // grados por segundo cuando gira sola
+const BASE = -2.5 // grados por segundo cuando gira sola (una tarjeta cada ~12 s)
 
 /**
  * Escena 6 · noche. Los certificados van en una rueda de tarjetas cuyo centro queda debajo
@@ -63,7 +63,7 @@ export default function Certificados() {
       const s = Math.min(dt, 50) / 1000
       // la velocidad vuelve poco a poco a la de crucero
       const objetivo = g.auto ? BASE : 0
-      g.vel += (objetivo - g.vel) * Math.min(1, s * 1.6)
+      g.vel += (objetivo - g.vel) * Math.min(1, s * 2.5)
       g.angulo += g.vel * s
       aplicar()
     }
@@ -76,7 +76,7 @@ export default function Certificados() {
       onToggle: (self) => (g.visible = self.isActive),
       onUpdate: (self) => {
         if (quieto) return
-        g.vel = gsap.utils.clamp(-120, 120, g.vel - self.getVelocity() * 0.02)
+        g.vel = gsap.utils.clamp(-20, 20, g.vel - self.getVelocity() * 0.004)
       },
     })
 
@@ -98,7 +98,7 @@ export default function Certificados() {
       const R = parseFloat(el.style.getPropertyValue('--R')) || 600
       const dAng = (dx / R) * (180 / Math.PI)
       g.angulo += dAng
-      g.vel = (dAng / Math.max(1, ahora - tUltimo)) * 1000
+      g.vel = gsap.utils.clamp(-30, 30, (dAng / Math.max(1, ahora - tUltimo)) * 1000)
       g.movido = Math.abs(e.clientX - x0)
       ultimo = e.clientX
       tUltimo = ahora
@@ -153,8 +153,8 @@ export default function Certificados() {
     g.arrastrando = true
     gsap.to(g, {
       angulo: destino,
-      duration: 0.7,
-      ease: 'expo.out',
+      duration: 1.2,
+      ease: 'power3.inOut',
       onUpdate: () => {
         rueda.current!.style.transform = `rotate(${g.angulo}deg)`
         dial.current!.style.transform = `rotate(${-g.angulo * 0.5}deg)`
