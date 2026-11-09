@@ -354,7 +354,7 @@ button:focus-visible {
 .marquee-track {
   display: flex;
   width: max-content;
-  animation: marquee 34s linear infinite;
+  animation: marquee 70s linear infinite;
 }
 .logo-mono {
   filter: grayscale(1) brightness(0.35);

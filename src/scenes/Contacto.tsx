@@ -1,7 +1,8 @@
 import { useLayoutEffect, useRef, useState } from 'react'
 import Monograma from '../components/Monograma'
 import RollLink from '../components/RollLink'
-import { CONTACTO, LOGOS_MARQUEE, SECCIONES } from '../lib/data'
+import { CONTACTO, SECCIONES } from '../lib/data'
+import LogoMarquee from '../components/LogoMarquee'
 import { gsap, scrollToId } from '../lib/motion'
 
 function Copiable({ valor, etiqueta }: { valor: string; etiqueta: string }) {
@@ -112,13 +113,7 @@ export default function Contacto() {
         </div>
       </div>
 
-      <div className="overflow-hidden border-t border-white/10 py-5">
-        <div className="marquee-track gap-16" style={{ animationDirection: 'reverse' }}>
-          {[...LOGOS_MARQUEE, ...LOGOS_MARQUEE].map((l, i) => (
-            <img key={i} src={`/logos/${l}.svg`} alt="" className="h-7 w-auto opacity-40 grayscale" />
-          ))}
-        </div>
-      </div>
+      <LogoMarquee reverse className="border-t border-white/10 py-5" imgClassName="h-7 opacity-40 grayscale" />
     </section>
   )
 }

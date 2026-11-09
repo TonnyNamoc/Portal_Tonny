@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef, useState } from 'react'
-import { APRENDIENDO, HABILIDADES, LOGOS_MARQUEE } from '../lib/data'
+import { APRENDIENDO, HABILIDADES } from '../lib/data'
+import LogoMarquee from '../components/LogoMarquee'
 import { gsap } from '../lib/motion'
 
 function Nivel({ n }: { n: number }) {
@@ -131,13 +132,7 @@ export default function Habilidades() {
               </span>
             ))}
           </div>
-          <div className="overflow-hidden">
-            <div className="marquee-track gap-16">
-              {[...LOGOS_MARQUEE, ...LOGOS_MARQUEE].map((l, i) => (
-                <img key={i} src={`/logos/${l}.svg`} alt="" className="logo-mono h-8 w-auto" />
-              ))}
-            </div>
-          </div>
+          <LogoMarquee imgClassName="logo-mono" />
         </div>
       </div>
     </section>
