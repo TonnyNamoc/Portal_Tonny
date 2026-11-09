@@ -33,7 +33,6 @@ export default function Proyectos() {
           },
         })
         tl.to(t, { x: () => -distancia() }, 0)
-          .fromTo('.proy-titulo', { xPercent: 0 }, { xPercent: -30 }, 0)
           .fromTo('.eje-marca', { left: '0%' }, { left: '100%' }, 0)
       })
       mm.add(QUIETO('(max-width: 1023px)'), () => {
@@ -47,14 +46,6 @@ export default function Proyectos() {
 
   return (
     <section id="proyectos" ref={root} className="mundo-noche relative overflow-hidden lg:h-[100svh]">
-      <div
-        className="proy-titulo display pointer-events-none absolute left-0 top-[10%] whitespace-nowrap text-[22vw] select-none hidden lg:block"
-        aria-hidden="true"
-        style={{ color: 'transparent', WebkitTextStroke: '1.5px rgba(46,107,255,0.45)' }}
-      >
-        Proyectos · Proyectos
-      </div>
-
       <div
         ref={track}
         className="relative z-10 flex flex-col items-center gap-14 gutter py-28 lg:h-full lg:w-max lg:flex-row lg:items-center lg:gap-[10vw] lg:py-0 lg:pl-[8vw] lg:pr-[12vw]"

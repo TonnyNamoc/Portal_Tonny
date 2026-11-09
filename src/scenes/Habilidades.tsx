@@ -6,7 +6,7 @@ import { gsap, MOV } from '../lib/motion'
 function UsadoEn({ en }: { en: string[] }) {
   if (!en.length) return null
   return (
-    <p className="mono text-xs leading-relaxed" style={{ color: 'var(--adobe-tinta)' }}>
+    <p className="mono text-xs leading-relaxed lg:text-sm" style={{ color: 'var(--adobe-tinta)' }}>
       <span className="opacity-70">Usado en </span>
       {en.join(' · ')}
     </p>
@@ -59,18 +59,15 @@ export default function Habilidades() {
   return (
     <section id="habilidades" ref={root} className="mundo-adobe wipe-in relative">
       <div className="hab-stage relative overflow-hidden lg:h-[100svh]">
-        <h2 className="display outline-text pointer-events-none absolute inset-x-0 top-[8%] select-none whitespace-nowrap text-center text-[18vw] text-adobe-sombra hidden lg:block" aria-hidden="true">
-          Habilidades
-        </h2>
-
         {/* Escritorio: escenario con una habilidad a la vez */}
-        <div className="relative hidden h-full lg:grid grid-cols-[minmax(240px,1fr)_minmax(0,1.4fr)_auto] items-center gap-10 gutter">
-          <div className="grid gap-4 self-end pb-36">
+        <div className="relative hidden h-full lg:grid grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)_auto] items-center gap-10 gutter lg:px-[6vw]">
+          <div className="grid gap-5 self-center pb-16">
             <span className="eyebrow text-adobe-tinta" style={{ color: 'var(--adobe-tinta)' }}>
               {h.categoria}
             </span>
-            <p className="display text-[56px]">{h.nombre}</p>
-            <ul className="grid gap-1 text-sm" style={{ color: 'var(--adobe-tinta)' }}>
+            <h2 className="sr-only">Habilidades</h2>
+            <p className="display text-[clamp(72px,9.5vw,168px)] leading-[0.86]">{h.nombre}</p>
+            <ul className="grid gap-1.5 text-[clamp(17px,1.5vw,22px)]" style={{ color: 'var(--adobe-tinta)' }}>
               {h.detalles.map((d) => (
                 <li key={d}>+ {d}</li>
               ))}
@@ -78,12 +75,12 @@ export default function Habilidades() {
             <UsadoEn en={h.usadoEn} />
           </div>
 
-          <div className="relative grid h-[52vh] place-items-center">
+          <div className="relative grid h-[40vh] place-items-center">
             {HABILIDADES.map((x) => (
               <div key={x.nombre} className="hab-item absolute inset-0 grid place-items-center">
                 <div className="flex items-center gap-8">
                   {x.logos.map((l) => (
-                    <img key={l} src={l} alt="" className="h-[30vh] max-h-[280px] w-auto drop-shadow-[0_30px_40px_rgba(14,18,24,0.35)]" />
+                    <img key={l} src={l} alt="" className="h-[19vh] max-h-[190px] w-auto drop-shadow-[0_22px_30px_rgba(14,18,24,0.3)]" />
                   ))}
                 </div>
               </div>
