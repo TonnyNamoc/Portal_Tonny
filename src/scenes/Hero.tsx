@@ -18,9 +18,32 @@ export default function Hero({ listo }: { listo: boolean }) {
       mm.add('(prefers-reduced-motion: no-preference)', () => {
         const tl = gsap.timeline({
           defaults: { ease: 'none' },
-          scrollTrigger: { trigger: root.current, start: 'top top', end: '+=130%', scrub: 0.6, pin: true },
+          scrollTrigger: { trigger: root.current, start: 'top top', end: '+=130%', scrub: 0.6, pin: true, invalidateOnRefresh: true },
         })
-        tl.fromTo('.hero-frame', { scale: 3.2 }, { scale: 1 }, 0)
+        // Escala inicial calculada para que el editor siempre cubra toda la pantalla
+        // Punto de origen del zoom: arriba a la izquierda del editor, donde empieza el código
+        const OX = 0.35
+        const OY = 0.35
+        const cubrir = () => {
+          const f = root.current!.querySelector<HTMLElement>('.hero-frame')!
+          const r = f.getBoundingClientRect()
+          const w = f.offsetWidth
+          const h = f.offsetHeight
+          const L = r.left + (r.width - w) / 2
+          const T = r.top + (r.height - h) / 2
+          const vw = window.innerWidth
+          const vh = window.innerHeight
+          // Escala mínima para que, con ese origen, el editor cubra los cuatro bordes
+          const s = Math.max(
+            1 + L / (OX * w),
+            (vw - L - OX * w) / ((1 - OX) * w),
+            1 + T / (OY * h),
+            (vh - T - OY * h) / ((1 - OY) * h)
+          )
+          return s * 1.08
+        }
+        gsap.set('.hero-frame', { transformOrigin: `${OX * 100}% ${OY * 100}%` })
+        tl.fromTo('.hero-frame', { scale: cubrir }, { scale: 1 }, 0)
           .fromTo('.hero-img', { scale: 1.25 }, { scale: 1 }, 0)
           .fromTo('.hero-ghost', { yPercent: 18, opacity: 0.25 }, { yPercent: 0, opacity: 1 }, 0)
           .fromTo('.hero-side', { opacity: 0, y: 24 }, { opacity: 1, y: 0, stagger: 0.08 }, 0.45)
@@ -54,7 +77,7 @@ export default function Hero({ listo }: { listo: boolean }) {
       </div>
 
       <div className="relative z-10 grid h-full place-items-center gutter">
-        <div className="hero-frame relative aspect-[4/3] w-[min(78vw,640px)] overflow-hidden rounded-[10px] shadow-[0_40px_80px_rgba(14,18,24,0.45)] origin-[30%_38%]">
+        <div className="hero-frame relative aspect-[4/3] w-[78vw] lg:aspect-[16/10] lg:w-[min(62vw,880px)] overflow-hidden rounded-[10px] shadow-[0_40px_80px_rgba(14,18,24,0.45)] origin-center">
           <div className="hero-img h-full w-full">
             <HeroEditor escribir={listo} />
           </div>
