@@ -59,8 +59,7 @@ export default function Proyectos() {
             </span>
           </h2>
           <p className="text-niebla">
-            Proyectos académicos de TECSUP y una startup. Abre cada uno para ver qué es y qué hice. El código es privado
-            por ahora; si quieres verlo, te lo muestro.
+            Proyectos académicos de TECSUP y una startup. Abre cada uno para ver qué es y qué hice.
           </p>
         </div>
 
@@ -128,11 +127,10 @@ export default function Proyectos() {
               {p.codigoPrivado ? (
                 <>
                   <p className="text-sm leading-relaxed text-niebla">
-                    <span className="etiqueta-cinta mr-2 align-middle">Código privado</span>
-                    El repositorio todavía no es público. Si quieres verlo o que te lo explique en una llamada, escríbeme.
+                    El código de este proyecto no es público. Si quieres, te cuento cómo lo construí y qué decisiones tomé.
                   </p>
-                  <a className="btn justify-self-start" href={`mailto:${CONTACTO.correo}?subject=${encodeURIComponent(`Quiero ver el proyecto ${p.titulo}`)}`}>
-                    Pedir una demo
+                  <a className="btn justify-self-start" href={`mailto:${CONTACTO.correo}?subject=${encodeURIComponent(`Sobre el proyecto ${p.titulo}`)}`}>
+                    Pregúntame por este proyecto
                   </a>
                 </>
               ) : (
