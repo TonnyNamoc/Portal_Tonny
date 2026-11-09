@@ -14,7 +14,7 @@ const LENTE = { cx: 466, cy: 478, rx: 78, ry: 50 }
 
 /**
  * Escena 1 · noche.
- * Arranca con el video de código a pantalla completa. Al hacer scroll la cámara se aleja:
+ * Arranca con el video de código a pantalla completa y la firma (nombre y rol) encima. Al hacer scroll la cámara se aleja:
  * el video se encoge hasta quedar dentro de los lentes de la foto y, cuando ya se te ve
  * entero, TONNY NAMOC aparece detrás.
  */
@@ -65,13 +65,15 @@ export default function Hero({ listo }: { listo: boolean }) {
             scrollTrigger: {
               trigger: sec,
               start: 'top top',
-              end: '+=220%',
+              end: () => (window.innerWidth < 640 ? '+=130%' : '+=160%'),
+              invalidateOnRefresh: true,
               scrub: 0.6,
               pin: true,
               onRefresh: colocar,
             },
           })
           .to('.scroll-hint-wrap', { opacity: 0, duration: 0.05 }, 0)
+          .to('.hero-firma', { opacity: 0, y: -20, duration: 0.14, ease: 'power1.in' }, 0.04)
           .fromTo(zoom, { m: 0 }, { m: 1, duration: 0.6, ease: 'power1.inOut' }, 0)
           .fromTo(foto, { scale: 1.9 }, { scale: 1, duration: 0.6, ease: 'power1.inOut' }, 0)
           .fromTo('.hero-letra', { yPercent: 110 }, { yPercent: 0, duration: 0.25, stagger: 0.015, ease: 'power3.out' }, 0.55)
@@ -80,6 +82,8 @@ export default function Hero({ listo }: { listo: boolean }) {
       })
       mm.add(QUIETO(), () => {
         zoom.m = 1
+        // Sin animación el nombre grande ya está a la vista
+        gsap.set('.hero-firma', { display: 'none' })
       })
     }, sec)
 
@@ -96,6 +100,7 @@ export default function Hero({ listo }: { listo: boolean }) {
     if (!listo) return
     const ctx = gsap.context(() => {
       gsap.from('.scroll-hint-wrap', { opacity: 0, y: 16, duration: 0.8, delay: 0.3, ease: 'expo.out' })
+      gsap.from('.hero-firma > *', { opacity: 0, y: 24, duration: 0.9, delay: 0.15, stagger: 0.08, ease: 'expo.out' })
     }, root)
     return () => ctx.revert()
   }, [listo])
@@ -149,6 +154,15 @@ export default function Hero({ listo }: { listo: boolean }) {
         </video>
         {/* Tinte de cristal oscuro */}
         <div className="absolute inset-0" style={{ background: 'linear-gradient(160deg, rgba(255,255,255,0.08), rgba(14,18,24,0.25) 45%)' }} />
+      </div>
+
+      {/* Firma: quién soy desde el primer segundo, antes de que la cámara se aleje */}
+      <div className="hero-firma pointer-events-none absolute inset-x-0 bottom-0 z-20 grid gap-2 gutter pb-24 pt-40" aria-hidden="true">
+        <span className="eyebrow" style={{ color: 'var(--totora)' }}>
+          Portafolio · Trujillo, Perú
+        </span>
+        <p className="display text-[clamp(56px,9vw,132px)] leading-[0.85] text-cal">Tonny Namoc</p>
+        <p className="max-w-[30ch] text-lg text-cal md:text-xl">Desarrollador de software. Soluciones web y de datos.</p>
       </div>
 
       {/* Textos satélite */}

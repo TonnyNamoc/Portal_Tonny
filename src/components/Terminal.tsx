@@ -13,7 +13,7 @@ const AYUDA = `Comandos:
   help           muestra esta ayuda
   sobre          quién soy
   proyectos      lista de proyectos
-  stack          tecnologías y nivel
+  stack          tecnologías y dónde las usé
   aprendiendo    lo que estoy estudiando
   certificados   cursos aprobados
   contacto       correo y teléfono
@@ -40,11 +40,10 @@ function ejecutar(entrada: string, cerrar: () => void): Linea[] | 'clear' {
     case 'proyectos':
     case 'ls':
       return PROYECTOS.map((p) => ({
-        texto: `${p.titulo.padEnd(24)} ${p.stack.join(', ')}${p.noEncontrado ? '   [404]' : ''}`,
-        tipo: p.noEncontrado ? 'dim' : undefined,
+        texto: `${p.titulo.padEnd(24)} ${p.stack.join(', ')}${p.codigoPrivado ? '   [privado]' : ''}`,
       }))
     case 'stack':
-      return HABILIDADES.map((h) => ({ texto: `${h.nombre.padEnd(12)} ${'■'.repeat(h.nivel)}${'□'.repeat(5 - h.nivel)}  ${h.categoria}` }))
+      return HABILIDADES.map((h) => ({ texto: `${h.nombre.padEnd(13)} ${h.categoria.padEnd(25)} ${h.usadoEn.join(', ')}`.trimEnd() }))
     case 'certificados':
       return CERTIFICADOS.map((c) => ({ texto: `${c.fecha.padEnd(12)} ${String(c.horas).padStart(2)} h  ${c.titulo}  · ${c.emisor}` }))
     case 'aprendiendo':
@@ -61,7 +60,7 @@ function ejecutar(entrada: string, cerrar: () => void): Linea[] | 'clear' {
       a.href = CONTACTO.cv
       a.download = ''
       a.click()
-      return [{ texto: 'Descargando CV-Tonny-Namoc.docx…', tipo: 'ok' }]
+      return [{ texto: 'Descargando CV-Tonny-Namoc.pdf…', tipo: 'ok' }]
     }
     case 'ir':
     case 'cd': {

@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import Panel from '../components/Panel'
 import { CERTIFICADOS } from '../lib/data'
 import { gsap, prefersReducedMotion, ScrollTrigger, MOV } from '../lib/motion'
 
@@ -10,8 +11,8 @@ const BASE = -2.5 // grados por segundo cuando gira sola (una tarjeta cada ~12 s
 
 /**
  * Escena 6 · noche. Los certificados van en una rueda de tarjetas cuyo centro queda debajo
- * de la pantalla. Gira sola, se acelera con el scroll y se puede arrastrar. La marca ▲
- * señala el certificado que está arriba.
+ * de la pantalla. Gira sola, se acelera con el scroll y se puede arrastrar; se detiene con
+ * el mouse encima. La marca ▲ señala el certificado que está arriba. Un clic lo abre en grande.
  */
 export default function Certificados() {
   const root = useRef<HTMLElement>(null)
@@ -19,10 +20,13 @@ export default function Certificados() {
   const rueda = useRef<HTMLDivElement>(null)
   const dial = useRef<HTMLDivElement>(null)
   const [activo, setActivo] = useState(0)
+  // Certificado abierto en grande, o null
+  const [ver, setVer] = useState<number | null>(null)
   const totalHoras = CERTIFICADOS.reduce((t, c) => t + c.horas, 0)
 
   // Estado de la rueda fuera de React para no re-renderizar en cada cuadro
-  const giro = useRef({ angulo: 0, vel: BASE, arrastrando: false, movido: 0, visible: false, auto: true })
+  const giro = useRef({ angulo: 0, vel: BASE, arrastrando: false, movido: 0, visible: false, auto: true, encima: false, abierto: false })
+  giro.current.abierto = ver !== null
 
   // Medidas según el ancho de pantalla
   useLayoutEffect(() => {
@@ -59,10 +63,10 @@ export default function Certificados() {
     }
 
     const tick = (_t: number, dt: number) => {
-      if (!g.visible || g.arrastrando) return
+      if (!g.visible || g.arrastrando || g.abierto) return
       const s = Math.min(dt, 50) / 1000
       // la velocidad vuelve poco a poco a la de crucero
-      const objetivo = g.auto ? BASE : 0
+      const objetivo = g.auto && !g.encima ? BASE : 0
       g.vel += (objetivo - g.vel) * Math.min(1, s * 2.5)
       g.angulo += g.vel * s
       aplicar()
@@ -75,7 +79,7 @@ export default function Certificados() {
       end: 'bottom top',
       onToggle: (self) => (g.visible = self.isActive),
       onUpdate: (self) => {
-        if (quieto) return
+        if (quieto || g.abierto) return
         g.vel = gsap.utils.clamp(-20, 20, g.vel - self.getVelocity() * 0.004)
       },
     })
@@ -107,6 +111,15 @@ export default function Certificados() {
     const up = () => {
       g.arrastrando = false
     }
+    // Con el mouse encima la rueda se detiene para poder leer
+    const entra = (e: PointerEvent) => {
+      if (e.pointerType === 'mouse') g.encima = true
+    }
+    const sale = () => {
+      g.encima = false
+    }
+    el.addEventListener('pointerenter', entra)
+    el.addEventListener('pointerleave', sale)
     el.addEventListener('pointerdown', down)
     window.addEventListener('pointermove', move)
     window.addEventListener('pointerup', up)
@@ -116,6 +129,8 @@ export default function Certificados() {
     return () => {
       gsap.ticker.remove(tick)
       st.kill()
+      el.removeEventListener('pointerenter', entra)
+      el.removeEventListener('pointerleave', sale)
       el.removeEventListener('pointerdown', down)
       window.removeEventListener('pointermove', move)
       window.removeEventListener('pointerup', up)
@@ -169,6 +184,7 @@ export default function Certificados() {
   }
 
   const c = CERTIFICADOS[activo]
+  const v = ver === null ? null : CERTIFICADOS[ver]
   const textoDial = `CERTIFICADOS · ${totalHoras} HORAS · PLATZI · SIGO APRENDIENDO · `
 
   return (
@@ -225,7 +241,10 @@ export default function Certificados() {
                   rel="noreferrer"
                   tabIndex={-1}
                   draggable={false}
-                  onClick={(e) => giro.current.movido > 6 && e.preventDefault()}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    if (giro.current.movido <= 6) setVer(i % CERTIFICADOS.length)
+                  }}
                   className="cert-carta absolute block overflow-hidden rounded-[12px] bg-white shadow-[0_24px_50px_rgba(0,0,0,0.5)]"
                   style={{
                     width: 'var(--cw)',
@@ -288,13 +307,43 @@ export default function Certificados() {
         <button type="button" className="btn btn-ghost text-cal max-sm:hidden" onClick={() => saltar(-1)} aria-label="Certificado anterior">
           ←
         </button>
-        <a className="btn" href={c.pdf} target="_blank" rel="noreferrer">
+        <button type="button" className="btn" onClick={() => setVer(activo)}>
           Ver certificado
-        </a>
+        </button>
         <button type="button" className="btn btn-ghost text-cal max-sm:hidden" onClick={() => saltar(1)} aria-label="Certificado siguiente">
           →
         </button>
       </div>
+
+      <Panel abierto={v !== null} alCerrar={() => setVer(null)} etiqueta={v ? `Certificado: ${v.titulo}` : 'Certificado'} variante="centro">
+        {v && ver !== null && (
+          <div key={ver} className="caso grid gap-5">
+            <img src={v.img} alt={`Certificado de ${v.titulo}, ${v.emisor}`} className="cert-grande" />
+            <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-end">
+              <div className="grid gap-2">
+                <h3 className="display text-[clamp(28px,3.4vw,44px)] leading-[0.95] text-cal">{v.titulo}</h3>
+                <p className="mono text-[11px] uppercase tracking-[0.14em] text-niebla">
+                  {v.emisor} · {v.modalidad} · {v.fecha} · {v.horas} h
+                </p>
+              </div>
+              <a className="btn justify-self-start" href={v.pdf} target="_blank" rel="noreferrer">
+                Abrir PDF <span aria-hidden="true">↗</span>
+              </a>
+            </div>
+            <nav className="flex items-center justify-between gap-4 border-t border-white/10 pt-4" aria-label="Otros certificados">
+              <button type="button" className="caso-nav" onClick={() => setVer((ver - 1 + CERTIFICADOS.length) % CERTIFICADOS.length)}>
+                <span aria-hidden="true">←</span> Anterior
+              </button>
+              <span className="mono text-xs text-niebla">
+                {String(ver + 1).padStart(2, '0')} / {String(CERTIFICADOS.length).padStart(2, '0')}
+              </span>
+              <button type="button" className="caso-nav text-right" onClick={() => setVer((ver + 1) % CERTIFICADOS.length)}>
+                Siguiente <span aria-hidden="true">→</span>
+              </button>
+            </nav>
+          </div>
+        )}
+      </Panel>
     </section>
   )
 }

@@ -17,9 +17,14 @@ export interface Proyecto {
   curso: string
   ciclo: string
   stack: string[]
-  puntos: string[]
-  /** true mientras el código no esté disponible: se muestra con la cinta 404 */
-  noEncontrado: boolean
+  /** Una frase: qué es el proyecto */
+  queEs: string
+  /** Lo que hice yo, punto por punto */
+  hice: string[]
+  /** true si fue trabajo en equipo y aporté en una parte */
+  participacion?: boolean
+  /** true mientras el repositorio no sea público */
+  codigoPrivado: boolean
   enlace?: string
 }
 
@@ -29,32 +34,45 @@ export const PROYECTOS: Proyecto[] = [
     curso: 'Sistema web tipo ONPE con reportes en PDF',
     ciclo: 'Proyecto académico',
     stack: ['ASP.NET Core MVC', 'EF Core', 'SQL Server', 'QuestPDF'],
-    puntos: ['Registro y consulta de resultados electorales', 'Reportes en PDF'],
-    noEncontrado: true,
+    queEs: 'Sistema web para registrar y consultar resultados electorales, al estilo del portal de la ONPE.',
+    hice: [
+      'Registro y consulta de resultados electorales',
+      'Reportes en PDF generados con QuestPDF',
+      'Acceso a datos con Entity Framework Core sobre SQL Server',
+    ],
+    codigoPrivado: true,
   },
   {
     titulo: 'Data Warehouse y BI',
     curso: 'Esquemas estrella y copo de nieve, ETL y dashboards de ventas',
     ciclo: 'Proyecto académico',
     stack: ['SQL Server', 'BigQuery', 'Power BI', 'Python'],
-    puntos: ['Procesos ETL', 'Dashboards de indicadores de ventas'],
-    noEncontrado: true,
+    queEs: 'Almacenes de datos y tableros para leer indicadores de ventas.',
+    hice: [
+      'Diseño de data warehouses con esquemas estrella y copo de nieve',
+      'Procesos ETL para cargar y ordenar los datos',
+      'Dashboards de indicadores de ventas',
+    ],
+    codigoPrivado: true,
   },
   {
     titulo: 'Le Peruparfum',
     curso: 'E-commerce con panel administrativo y pagos',
     ciclo: 'Proyecto académico',
     stack: ['Laravel', 'MySQL', 'Stripe'],
-    puntos: ['Arquitectura MVC y panel de productos', 'Pasarela de pagos Stripe'],
-    noEncontrado: true,
+    queEs: 'Tienda en línea con panel administrativo y pagos en línea.',
+    hice: ['Arquitectura MVC en Laravel', 'Panel administrativo de productos', 'Pasarela de pagos con Stripe'],
+    codigoPrivado: true,
   },
   {
     titulo: 'Chakray',
     curso: 'Marketplace agrícola B2B: modelo de negocio, arquitectura y nube',
     ciclo: 'Startup',
     stack: ['Next.js', 'Fastify', 'PostgreSQL', 'AWS'],
-    puntos: ['Diseño del modelo de negocio', 'Arquitectura e infraestructura en la nube'],
-    noEncontrado: true,
+    queEs: 'Marketplace agrícola B2B, trabajado en equipo como startup.',
+    hice: ['Diseño del modelo de negocio', 'Arquitectura tecnológica', 'Infraestructura en la nube'],
+    participacion: true,
+    codigoPrivado: true,
   },
 ]
 
@@ -63,20 +81,21 @@ export const CICLOS = ['2023', '2024', '2025', '2026']
 export interface Habilidad {
   categoria: string
   nombre: string
-  nivel: number
   detalles: string[]
   logos: string[]
+  /** Proyectos donde la usé (títulos de PROYECTOS) */
+  usadoEn: string[]
 }
 
 export const HABILIDADES: Habilidad[] = [
-  { categoria: 'Frontend', nombre: 'HTML + CSS', nivel: 5, detalles: ['Maquetación responsiva', 'Interfaces centradas en UX'], logos: ['/logos/html.svg', '/logos/css.svg'] },
-  { categoria: 'Frontend', nombre: 'JavaScript', nivel: 4, detalles: ['Interactividad y DOM', 'Next.js'], logos: ['/logos/javascript.svg'] },
-  { categoria: 'Backend', nombre: 'Java', nivel: 4, detalles: ['Programación orientada a objetos', 'Apps de escritorio'], logos: ['/logos/java.svg'] },
-  { categoria: 'Backend', nombre: 'Laravel', nivel: 4, detalles: ['Arquitectura MVC', 'E-commerce con Stripe'], logos: ['/logos/laravel.svg', '/logos/php.svg'] },
-  { categoria: 'Backend', nombre: 'ASP.NET Core', nivel: 3, detalles: ['C# y MVC', 'Entity Framework Core'], logos: ['/logos/csharp.svg'] },
-  { categoria: 'Base de datos', nombre: 'SQL', nivel: 4, detalles: ['MySQL, SQL Server y PostgreSQL', 'Modelado y consultas'], logos: ['/logos/mysql.svg', '/logos/sql.svg'] },
-  { categoria: 'Inteligencia de negocios', nombre: 'Power BI', nivel: 3, detalles: ['Data warehouse y ETL', 'BigQuery y Python'], logos: ['/logos/bi.svg'] },
-  { categoria: 'Herramientas', nombre: 'Git', nivel: 3, detalles: ['Control de versiones', 'SAP S/4HANA (MM, PP)'], logos: ['/logos/git.svg'] },
+  { categoria: 'Frontend', nombre: 'HTML + CSS', detalles: ['Maquetación responsiva', 'Interfaces centradas en UX'], logos: ['/logos/html.svg', '/logos/css.svg'], usadoEn: ['Le Peruparfum', 'Resultados Electorales'] },
+  { categoria: 'Frontend', nombre: 'JavaScript', detalles: ['Interactividad y DOM', 'Next.js'], logos: ['/logos/javascript.svg'], usadoEn: ['Chakray'] },
+  { categoria: 'Backend', nombre: 'Java', detalles: ['Programación orientada a objetos', 'Apps de escritorio'], logos: ['/logos/java.svg'], usadoEn: [] },
+  { categoria: 'Backend', nombre: 'Laravel', detalles: ['Arquitectura MVC', 'E-commerce con Stripe'], logos: ['/logos/laravel.svg', '/logos/php.svg'], usadoEn: ['Le Peruparfum'] },
+  { categoria: 'Backend', nombre: 'ASP.NET Core', detalles: ['C# y MVC', 'Entity Framework Core'], logos: ['/logos/csharp.svg'], usadoEn: ['Resultados Electorales'] },
+  { categoria: 'Base de datos', nombre: 'SQL', detalles: ['MySQL, SQL Server y PostgreSQL', 'Modelado y consultas'], logos: ['/logos/mysql.svg', '/logos/sql.svg'], usadoEn: ['Resultados Electorales', 'Le Peruparfum', 'Chakray'] },
+  { categoria: 'Inteligencia de negocios', nombre: 'Power BI', detalles: ['Data warehouse y ETL', 'BigQuery y Python'], logos: ['/logos/bi.svg'], usadoEn: ['Data Warehouse y BI'] },
+  { categoria: 'Herramientas', nombre: 'Git', detalles: ['Control de versiones', 'SAP S/4HANA (MM, PP)'], logos: ['/logos/git.svg'], usadoEn: [] },
 ]
 
 export const APRENDIENDO = ['AWS', 'Cloud', 'DAX', 'Next.js', 'Inglés intermedio']
@@ -122,6 +141,9 @@ export const CONTACTO = {
   telefonoHref: 'tel:+51983415509',
   ciudad: 'Trujillo, Perú',
   linkedin: 'https://www.linkedin.com/in/tonny-namoc-b31107415',
-  cv: '/CV-Tonny-Namoc.docx',
+  cv: '/CV-Tonny-Namoc.pdf',
+  /** Cambia a false cuando ya no busques oportunidades */
+  disponible: true,
+  disponibleTexto: 'Disponible para nuevas oportunidades',
   nombreCompleto: 'Tonny Alexander Namoc Julca',
 }

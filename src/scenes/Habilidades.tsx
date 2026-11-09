@@ -3,13 +3,13 @@ import { APRENDIENDO, HABILIDADES } from '../lib/data'
 import LogoMarquee from '../components/LogoMarquee'
 import { gsap, MOV } from '../lib/motion'
 
-function Nivel({ n }: { n: number }) {
+function UsadoEn({ en }: { en: string[] }) {
+  if (!en.length) return null
   return (
-    <div className="flex gap-1.5" aria-label={`Nivel ${n} de 5`}>
-      {Array.from({ length: 5 }, (_, i) => (
-        <i key={i} className="block h-2 w-6 rounded-sm" style={{ background: i < n ? 'var(--noche)' : 'rgba(14,18,24,0.15)' }} />
-      ))}
-    </div>
+    <p className="mono text-xs leading-relaxed" style={{ color: 'var(--adobe-tinta)' }}>
+      <span className="opacity-70">Usado en </span>
+      {en.join(' · ')}
+    </p>
   )
 }
 
@@ -75,7 +75,7 @@ export default function Habilidades() {
                 <li key={d}>+ {d}</li>
               ))}
             </ul>
-            <Nivel n={h.nivel} />
+            <UsadoEn en={h.usadoEn} />
           </div>
 
           <div className="relative grid h-[52vh] place-items-center">
@@ -104,7 +104,7 @@ export default function Habilidades() {
         </div>
 
         {/* Móvil: lista */}
-        <div className="grid gap-10 gutter py-28 lg:hidden">
+        <div className="grid gap-10 gutter pb-10 pt-28 lg:hidden">
           <h2 className="display text-[64px]">Habilidades</h2>
           {HABILIDADES.map((x) => (
             <div key={x.nombre} className="grid grid-cols-[72px_1fr] items-center gap-5">
@@ -114,14 +114,14 @@ export default function Habilidades() {
                   {x.categoria}
                 </span>
                 <p className="display text-[32px]">{x.nombre}</p>
-                <Nivel n={x.nivel} />
+                <UsadoEn en={x.usadoEn} />
               </div>
             </div>
           ))}
         </div>
 
         {/* Aprendiendo + marquee de logos */}
-        <div className="absolute inset-x-0 bottom-0 hidden lg:grid gap-4 pb-6">
+        <div className="grid gap-4 pb-8 lg:absolute lg:inset-x-0 lg:bottom-0 lg:pb-6">
           <div className="flex flex-wrap items-center gap-2 gutter">
             <span className="eyebrow mr-2" style={{ color: 'var(--adobe-tinta)' }}>
               Aprendiendo

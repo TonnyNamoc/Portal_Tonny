@@ -305,41 +305,195 @@ button:focus-visible {
     transform: translateY(-1.2%);
   }
 }
-.cinta {
+.proyecto {
+  transition: box-shadow 0.3s var(--ease-ui);
+}
+.proyecto:hover {
+  box-shadow: inset 0 0 0 1px var(--pacifico-claro), 0 30px 60px rgba(0, 0, 0, 0.4);
+}
+/* Relieve de Chan Chan que se desvanece hacia el texto */
+.proyecto-relieve {
   position: absolute;
-  left: -50%;
-  right: -50%;
-  top: calc(50% - 19px);
-  height: 38px;
-  background: var(--peligro);
-  color: #111;
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-  border-block: 2px solid #111;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
-  z-index: 2;
-  transform: rotate(-53deg);
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96'%3E%3Cpath d='M0 48h16V32h16V16h16v16h16v16h16v16H64v16H48V64H32V48H16' fill='none' stroke='%237FA6FF' stroke-opacity='.22' stroke-width='3'/%3E%3C/svg%3E") 0 0 / 96px 96px;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 62%);
+  mask-image: linear-gradient(to bottom, #000 0%, transparent 62%);
   pointer-events: none;
 }
-.cinta.b {
-  transform: rotate(53deg);
+.proyecto-num {
+  font-size: 104px;
+  line-height: 0.8;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(127, 166, 255, 0.7);
 }
-.cinta-track {
-  display: flex;
-  white-space: nowrap;
-  animation: marquee 14s linear infinite;
-}
-.cinta.b .cinta-track {
-  animation-direction: reverse;
-}
-.cinta-track span {
-  font-family: var(--f-display);
-  font-weight: 900;
-  font-size: 21px;
-  letter-spacing: 0.04em;
+/* Trozo de cinta amarilla: lo que antes cruzaba la tarjeta, ahora es una etiqueta */
+.etiqueta-cinta {
+  display: inline-block;
+  padding: 5px 9px 4px;
+  background: var(--peligro);
+  color: #111;
+  font: 900 13px/1 var(--f-display);
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  padding-right: 18px;
+  white-space: nowrap;
+  transform: rotate(-2deg);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4);
+}
+.proyecto-ver {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 0 4px;
+  border: 0;
+  background: none;
+  color: var(--totora);
+  font: 700 13px var(--f-body);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: inset 0 -1.5px 0 currentColor;
+}
+.proyecto-ver span {
+  transition: transform 0.25s var(--ease-ui);
+}
+.proyecto:hover .proyecto-ver span,
+.proyecto-ver:focus-visible span {
+  transform: translateX(5px);
+}
+
+/* ---------- Panel: caso de proyecto y certificado en grande ---------- */
+.panel {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  display: flex;
+  justify-content: flex-end;
+}
+.panel-fondo {
+  position: absolute;
+  inset: 0;
+  background: rgba(7, 9, 13, 0.72);
+  backdrop-filter: blur(6px);
+  animation: panel-fondo 0.35s var(--ease-ui) both;
+}
+.panel-caja {
+  position: relative;
+  width: min(100%, 560px);
+  height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 72px clamp(22px, 4vw, 44px) 40px;
+  background: var(--noche-2) var(--relieve-noche);
+  color: var(--cal);
+  box-shadow: -1px 0 0 rgba(243, 238, 230, 0.1), -40px 0 80px rgba(0, 0, 0, 0.5);
+  outline: none;
+  animation: panel-lateral 0.55s var(--ease-revelar) both;
+}
+.panel-cerrar {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 2;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(243, 238, 230, 0.08);
+  color: var(--cal);
+  font-size: 15px;
+  cursor: pointer;
+  transition: background-color 0.2s var(--ease-ui), transform 0.2s var(--ease-ui);
+}
+.panel-cerrar:hover {
+  background: rgba(243, 238, 230, 0.18);
+  transform: rotate(90deg);
+}
+.panel :is(a, button):focus-visible {
+  outline: 2px solid var(--totora);
+  outline-offset: 3px;
+}
+.panel-centro {
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+.panel-centro .panel-caja {
+  width: min(100%, 980px);
+  height: auto;
+  max-height: 100%;
+  padding: 64px clamp(18px, 3vw, 36px) 28px;
+  border-radius: 14px;
+  box-shadow: inset 0 0 0 1px rgba(243, 238, 230, 0.1), 0 40px 90px rgba(0, 0, 0, 0.6);
+  animation-name: panel-centro;
+}
+.caso > * {
+  animation: caso-entra 0.6s var(--ease-revelar) both;
+}
+.caso > :nth-child(2) { animation-delay: 0.05s; }
+.caso > :nth-child(3) { animation-delay: 0.1s; }
+.caso > :nth-child(4) { animation-delay: 0.15s; }
+.caso > :nth-child(5) { animation-delay: 0.2s; }
+.caso-nota {
+  padding: 18px;
+  border-radius: 10px;
+  background: rgba(243, 238, 230, 0.05);
+}
+.caso-nav {
+  border: 0;
+  background: none;
+  color: var(--niebla);
+  font: 500 12px var(--f-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 0.2s var(--ease-ui);
+}
+.caso-nav:hover {
+  color: var(--cal);
+}
+@keyframes panel-fondo {
+  from { opacity: 0; }
+}
+@keyframes panel-lateral {
+  from { transform: translateX(100%); }
+}
+@keyframes panel-centro {
+  from { opacity: 0; transform: translateY(24px) scale(0.97); }
+}
+@keyframes caso-entra {
+  from { opacity: 0; transform: translateY(18px); }
+}
+@media (max-width: 639px) {
+  /* En el celular el caso sube como hoja desde abajo */
+  .panel-lateral {
+    align-items: flex-end;
+  }
+  .panel-lateral .panel-caja {
+    width: 100%;
+    height: auto;
+    max-height: 90svh;
+    padding-top: 64px;
+    border-radius: 18px 18px 0 0;
+    box-shadow: 0 -1px 0 rgba(243, 238, 230, 0.12), 0 -30px 60px rgba(0, 0, 0, 0.5);
+    animation-name: panel-hoja;
+  }
+  .panel-lateral .panel-caja::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    width: 44px;
+    height: 4px;
+    margin-left: -22px;
+    border-radius: 4px;
+    background: rgba(243, 238, 230, 0.25);
+  }
+}
+@keyframes panel-hoja {
+  from { transform: translateY(100%); }
 }
 
 /* ---------- Marquee ---------- */
@@ -389,7 +543,7 @@ button:focus-visible {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html:not(.animar-forzado) :is(.flotar, .cinta-track, .marquee-track, .panel-flota, .scroll-hint) {
+  html:not(.animar-forzado) :is(.flotar, .marquee-track, .panel-flota, .scroll-hint, .panel-fondo, .panel-caja, .caso > *, .punto-vivo::after) {
     animation: none;
   }
   html:not(.animar-forzado) :is(.roll > span, .menu) {
@@ -539,4 +693,80 @@ button:focus-visible {
   html:not(.animar-forzado) .cert-titulo {
     animation: none;
   }
+}
+
+/* Firma del inicio: nombre y rol sobre el video, con un velo para que se lea */
+.hero-firma {
+  background: linear-gradient(to top, rgba(14, 18, 24, 0.97) 0%, rgba(14, 18, 24, 0.93) 58%, transparent 100%);
+}
+
+/* Certificado en grande */
+.cert-grande {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  max-height: 62svh;
+  margin-inline: auto;
+  border-radius: 8px;
+}
+
+/* Contacto */
+.disponible {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font: 500 12px var(--f-mono);
+  letter-spacing: 0.06em;
+  color: var(--cal);
+  padding: 8px 14px 8px 12px;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px rgba(200, 212, 90, 0.45);
+  background: rgba(200, 212, 90, 0.08);
+}
+.punto-vivo {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--totora);
+}
+.punto-vivo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--totora);
+  animation: punto-vivo 2s var(--ease-ui) infinite;
+}
+@keyframes punto-vivo {
+  from { transform: scale(1); opacity: 0.7; }
+  to { transform: scale(3.4); opacity: 0; }
+}
+.btn-grande {
+  font-size: clamp(16px, 1.5vw, 20px);
+  padding: clamp(18px, 1.8vw, 26px) clamp(30px, 3vw, 46px);
+  gap: 14px;
+}
+.btn-grande span {
+  transition: transform 0.3s var(--ease-ui);
+}
+.btn-grande:hover span {
+  transform: translateX(6px);
+}
+.enlace-linea {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  font: 700 14px var(--f-body);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cal);
+  text-decoration: none;
+  padding-bottom: 6px;
+  background: linear-gradient(var(--totora), var(--totora)) left bottom / 100% 1px no-repeat;
+  transition: background-size 0.3s var(--ease-ui), color 0.3s var(--ease-ui);
+}
+.enlace-linea:hover {
+  background-size: 100% 3px;
+  color: var(--totora);
 }

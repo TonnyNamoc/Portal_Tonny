@@ -55,7 +55,7 @@ export default function Contacto() {
 
   return (
     <section id="contacto" ref={root} className="mundo-noche wipe-in relative min-h-[100svh] overflow-hidden">
-      <div className="grid min-h-[100svh] gap-8 gutter py-10 lg:grid-cols-[260px_1fr]">
+      <div className="grid min-h-[100svh] gap-8 gutter pb-10 pt-24 lg:pt-10 lg:grid-cols-[260px_1fr]">
         {/* Panel lateral flotante */}
         <aside className="panel-flota hidden lg:grid content-between rounded-[10px] bg-[var(--noche-2)] p-6 shadow-[0_30px_60px_rgba(0,0,0,0.4)]" style={{ background: 'var(--noche-2)' }}>
           <div className="grid gap-8">
@@ -82,8 +82,16 @@ export default function Contacto() {
           </p>
         </aside>
 
-        <div className="grid content-center gap-10 lg:pl-10">
-          <span className="eyebrow text-niebla">Escena 07 · Contacto</span>
+        <div className="grid content-center gap-8 lg:pl-10">
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
+            <span className="eyebrow text-niebla">Escena 07 · Contacto</span>
+            {CONTACTO.disponible && (
+              <span className="disponible">
+                <i className="punto-vivo" aria-hidden="true" />
+                {CONTACTO.disponibleTexto}
+              </span>
+            )}
+          </div>
           <h2 className="display text-[clamp(72px,17vw,260px)] text-cal">
             <span className="sr-only">{palabra}</span>
             <span aria-hidden="true" className="inline-flex overflow-hidden">
@@ -94,24 +102,27 @@ export default function Contacto() {
               ))}
             </span>
           </h2>
-          <div className="grid gap-8 sm:grid-cols-3">
+          <p className="max-w-[34ch] text-xl leading-snug text-cal md:text-2xl">
+            Si tienes una vacante o un proyecto donde pueda aportar, escríbeme.
+          </p>
+          <div className="flex flex-wrap items-center gap-x-8 gap-y-5">
+            <a className="btn btn-grande" href={`mailto:${CONTACTO.correo}`}>
+              Escríbeme <span aria-hidden="true">→</span>
+            </a>
+            <a className="enlace-linea" href={CONTACTO.cv} download>
+              Descargar CV <span className="mono text-[11px] text-niebla">PDF</span>
+            </a>
+            <a className="enlace-linea" href={CONTACTO.linkedin} target="_blank" rel="noreferrer">
+              LinkedIn <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+          <div className="grid gap-8 border-t border-white/10 pt-8 sm:grid-cols-3">
             <Copiable valor={CONTACTO.correo} etiqueta="Correo · clic para copiar" />
             <Copiable valor={CONTACTO.telefono} etiqueta="Teléfono · clic para copiar" />
             <div className="grid gap-1">
               <span className="eyebrow text-niebla">Ciudad</span>
               <span className="text-lg md:text-xl">{CONTACTO.ciudad}</span>
             </div>
-          </div>
-          <div className="flex flex-wrap gap-3">
-            <a className="btn" href={`mailto:${CONTACTO.correo}`}>
-              Escríbeme
-            </a>
-            <a className="btn btn-ghost text-cal" href={CONTACTO.cv} download>
-              Descargar CV
-            </a>
-            <a className="btn btn-ghost text-cal" href={CONTACTO.linkedin} target="_blank" rel="noreferrer">
-              LinkedIn
-            </a>
           </div>
         </div>
       </div>

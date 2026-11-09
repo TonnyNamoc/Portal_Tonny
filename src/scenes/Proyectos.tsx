@@ -1,6 +1,7 @@
-import { useLayoutEffect, useRef } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
+import Panel from '../components/Panel'
 import ProyectoCard from '../components/ProyectoCard'
-import { CICLOS, PROYECTOS } from '../lib/data'
+import { CICLOS, CONTACTO, PROYECTOS } from '../lib/data'
 import { gsap, MOV, QUIETO } from '../lib/motion'
 
 /**
@@ -10,6 +11,9 @@ import { gsap, MOV, QUIETO } from '../lib/motion'
 export default function Proyectos() {
   const root = useRef<HTMLElement>(null)
   const track = useRef<HTMLDivElement>(null)
+  // Índice del caso abierto, o null
+  const [caso, setCaso] = useState<number | null>(null)
+  const p = caso === null ? null : PROYECTOS[caso]
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
@@ -64,14 +68,14 @@ export default function Proyectos() {
             </span>
           </h2>
           <p className="text-niebla">
-            Proyectos académicos de TECSUP y una startup. Su código no está publicado por ahora, así que van con cinta de
-            peligro hasta que los suba.
+            Proyectos académicos de TECSUP y una startup. Abre cada uno para ver qué es y qué hice. El código es privado
+            por ahora; si quieres verlo, te lo muestro.
           </p>
         </div>
 
         {PROYECTOS.map((p, i) => (
           <div key={p.titulo} className={`proy-item ${i % 2 ? 'lg:translate-y-[8vh]' : 'lg:-translate-y-[6vh]'}`}>
-            <ProyectoCard p={p} delay={-i * 2.3} />
+            <ProyectoCard p={p} n={i + 1} delay={-i * 2.3} alAbrir={() => setCaso(i)} />
           </div>
         ))}
 
@@ -92,6 +96,74 @@ export default function Proyectos() {
           <span className="eje-marca absolute -top-[5px] h-[9px] w-[9px] -translate-x-1/2 rounded-full" style={{ background: 'var(--pacifico)' }} />
         </div>
       </div>
+
+      <Panel abierto={p !== null} alCerrar={() => setCaso(null)} etiqueta={p ? `Caso: ${p.titulo}` : 'Caso'}>
+        {p && caso !== null && (
+          <div key={caso} className="caso grid gap-8">
+            <header className="grid gap-4">
+              <span className="eyebrow" style={{ color: 'var(--pacifico-claro)' }}>
+                Caso {String(caso + 1).padStart(2, '0')} de {String(PROYECTOS.length).padStart(2, '0')} · {p.ciclo}
+              </span>
+              <h3 className="display text-[clamp(44px,6vw,72px)] text-cal">{p.titulo}</h3>
+              <p className="text-lg leading-relaxed text-cal/90">{p.queEs}</p>
+            </header>
+
+            <section className="grid gap-3">
+              <h4 className="eyebrow text-niebla">{p.participacion ? 'En qué participé' : 'Lo que hice'}</h4>
+              <ol className="grid">
+                {p.hice.map((h, i) => (
+                  <li key={h} className="grid grid-cols-[2.5rem_1fr] items-baseline border-t border-white/10 py-3.5 last:border-b">
+                    <span className="mono text-xs" style={{ color: 'var(--totora)' }}>
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                    <span>{h}</span>
+                  </li>
+                ))}
+              </ol>
+            </section>
+
+            <section className="grid gap-3">
+              <h4 className="eyebrow text-niebla">Hecho con</h4>
+              <ul className="flex flex-wrap gap-2">
+                {p.stack.map((s) => (
+                  <li key={s} className="mono rounded-full bg-white/10 px-3 py-1.5 text-xs text-cal">
+                    {s}
+                  </li>
+                ))}
+              </ul>
+            </section>
+
+            <section className="caso-nota grid gap-4">
+              {p.codigoPrivado ? (
+                <>
+                  <p className="text-sm leading-relaxed text-niebla">
+                    <span className="etiqueta-cinta mr-2 align-middle">Código privado</span>
+                    El repositorio todavía no es público. Si quieres verlo o que te lo explique en una llamada, escríbeme.
+                  </p>
+                  <a className="btn justify-self-start" href={`mailto:${CONTACTO.correo}?subject=${encodeURIComponent(`Quiero ver el proyecto ${p.titulo}`)}`}>
+                    Pedir una demo
+                  </a>
+                </>
+              ) : (
+                p.enlace && (
+                  <a className="btn justify-self-start" href={p.enlace} target="_blank" rel="noreferrer">
+                    Ver proyecto
+                  </a>
+                )
+              )}
+            </section>
+
+            <nav className="flex items-center justify-between gap-4 border-t border-white/10 pt-5" aria-label="Otros casos">
+              <button type="button" className="caso-nav" onClick={() => setCaso((caso - 1 + PROYECTOS.length) % PROYECTOS.length)}>
+                <span aria-hidden="true">←</span> Anterior
+              </button>
+              <button type="button" className="caso-nav text-right" onClick={() => setCaso((caso + 1) % PROYECTOS.length)}>
+                {PROYECTOS[(caso + 1) % PROYECTOS.length].titulo} <span aria-hidden="true">→</span>
+              </button>
+            </nav>
+          </div>
+        )}
+      </Panel>
     </section>
   )
 }

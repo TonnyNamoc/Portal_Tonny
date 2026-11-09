@@ -2,11 +2,8 @@ import { useRef } from 'react'
 import type { Proyecto } from '../lib/data'
 import { gsap } from '../lib/motion'
 
-const CINTA_A = '404 ▲ No encontrado ▲ 404 ▲ No encontrado ▲ '
-const CINTA_B = 'Peligro ▲ 404 ▲ Peligro ▲ 404 ▲ '
-
-/** Tarjeta de proyecto. Si el código no está disponible, va cruzada por la cinta de peligro en X. */
-export default function ProyectoCard({ p, delay = 0 }: { p: Proyecto; delay?: number }) {
+/** Tarjeta de proyecto. Toda la tarjeta abre el caso; el botón "Ver caso" lo hace accesible con teclado. */
+export default function ProyectoCard({ p, n, delay = 0, alAbrir }: { p: Proyecto; n: number; delay?: number; alAbrir: () => void }) {
   const ref = useRef<HTMLElement>(null)
 
   // Inclinación 3D que sigue al puntero
@@ -26,26 +23,18 @@ export default function ProyectoCard({ p, delay = 0 }: { p: Proyecto; delay?: nu
         ref={ref}
         onPointerMove={onMove}
         onPointerLeave={onLeave}
-        className="proyecto grid aspect-[3/4] w-[min(82vw,380px)] content-end gap-3 p-6"
+        onClick={alAbrir}
+        className="proyecto group grid aspect-[3/4] w-[min(82vw,380px)] cursor-pointer content-between p-6"
       >
-        {p.noEncontrado && (
-          <>
-            <div className="cinta" aria-hidden="true">
-              <div className="cinta-track">
-                <span>{CINTA_A.repeat(2)}</span>
-                <span>{CINTA_A.repeat(2)}</span>
-              </div>
-            </div>
-            <div className="cinta b" aria-hidden="true">
-              <div className="cinta-track">
-                <span>{CINTA_B.repeat(2)}</span>
-                <span>{CINTA_B.repeat(2)}</span>
-              </div>
-            </div>
-          </>
-        )}
-        <div className="relative z-[3] grid gap-3 [text-shadow:0_2px_12px_rgba(0,0,0,0.85)]">
-          <span className="eyebrow text-pacifico-claro" style={{ color: 'var(--pacifico-claro)' }}>
+        <div className="proyecto-relieve" aria-hidden="true" />
+        <div className="relative z-[3] flex items-start justify-between gap-4">
+          <span className="proyecto-num display" aria-hidden="true">
+            {String(n).padStart(2, '0')}
+          </span>
+          {p.codigoPrivado && <span className="etiqueta-cinta">Código privado</span>}
+        </div>
+        <div className="relative z-[3] grid gap-3">
+          <span className="eyebrow" style={{ color: 'var(--pacifico-claro)' }}>
             {p.ciclo}
           </span>
           <h3 className="display text-[34px] text-cal">{p.titulo}</h3>
@@ -57,15 +46,17 @@ export default function ProyectoCard({ p, delay = 0 }: { p: Proyecto; delay?: nu
               </li>
             ))}
           </ul>
-          {p.noEncontrado ? (
-            <p className="mono text-[11px] text-niebla">Proyecto no encontrado. Pronto vuelve.</p>
-          ) : (
-            p.enlace && (
-              <a className="btn btn-ghost justify-self-start text-cal" href={p.enlace} target="_blank" rel="noreferrer">
-                Ver proyecto
-              </a>
-            )
-          )}
+          <button
+            type="button"
+            className="proyecto-ver mt-2"
+            onClick={(e) => {
+              e.stopPropagation()
+              alAbrir()
+            }}
+            aria-label={`Ver caso: ${p.titulo}`}
+          >
+            Ver caso <span aria-hidden="true">→</span>
+          </button>
         </div>
       </article>
     </div>
