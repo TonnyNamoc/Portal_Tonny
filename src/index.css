@@ -523,3 +523,19 @@ button:focus-visible {
     animation: none;
   }
 }
+
+/* Título del certificado al frente de la rueda */
+.cert-titulo {
+  animation: cert-titulo 0.5s var(--ease-revelar);
+}
+@keyframes cert-titulo {
+  from {
+    opacity: 0;
+    transform: translateY(40%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cert-titulo {
+    animation: none;
+  }
+}
