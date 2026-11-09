@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef } from 'react'
 import { gsap } from '../lib/motion'
 import { scrollToId } from '../lib/motion'
+import HeroEditor from '../components/HeroEditor'
 
 /**
  * Escena 1 · adobe.
@@ -53,12 +54,10 @@ export default function Hero({ listo }: { listo: boolean }) {
       </div>
 
       <div className="relative z-10 grid h-full place-items-center gutter">
-        <div className="hero-frame relative aspect-[4/3] w-[min(78vw,640px)] overflow-hidden rounded-[10px] shadow-[0_40px_80px_rgba(14,18,24,0.35)] origin-[52%_42%]">
-          <img
-            className="hero-img h-full w-full object-cover"
-            src="/logos/desarrollador.png"
-            alt="Pantalla con código CSS y logos de HTML, CSS, JavaScript, React, PHP, Laravel, MySQL y Git"
-          />
+        <div className="hero-frame relative aspect-[4/3] w-[min(78vw,640px)] overflow-hidden rounded-[10px] shadow-[0_40px_80px_rgba(14,18,24,0.45)] origin-[30%_38%]">
+          <div className="hero-img h-full w-full">
+            <HeroEditor escribir={listo} />
+          </div>
         </div>
       </div>
 
@@ -72,7 +71,7 @@ export default function Hero({ listo }: { listo: boolean }) {
         8.11° S · 79.03° O
       </p>
 
-      <h1 className="display absolute inset-x-0 bottom-[4%] z-20 gutter text-center text-noche text-[clamp(56px,13vw,210px)]">
+      <h1 className="display absolute inset-x-0 bottom-[4%] z-20 gutter text-center text-cal mix-blend-difference text-[clamp(56px,13vw,210px)]">
         <span className="sr-only">{nombre}</span>
         <span aria-hidden="true" className="inline-flex overflow-hidden">
           {nombre.split('').map((c, i) => (

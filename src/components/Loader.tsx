@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import Monograma from './Monograma'
 import { gsap, prefersReducedMotion, stopScroll } from '../lib/motion'
 
-const IMAGENES = ['/logos/desarrollador.png']
+const IMAGENES: string[] = []
 
 /** Carga real: fuentes + imágenes clave. El contador sube con lo que de verdad llega. */
 export default function Loader({ onDone }: { onDone: () => void }) {
