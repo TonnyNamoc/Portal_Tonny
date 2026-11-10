@@ -138,7 +138,7 @@ export const CERTIFICADOS: Certificado[] = [
 
 export const CONTACTO = {
   correo: 'tonny.namoc@tecsup.edu.pe',
-  telefono: '983 415 509',
+  telefono: '+51 983 415 509',
   telefonoHref: 'tel:+51983415509',
   ciudad: 'Trujillo, Perú',
   linkedin: 'https://www.linkedin.com/in/tonny-namoc-b31107415',
