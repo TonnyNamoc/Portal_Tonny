@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef } from 'react'
 import { CIFRAS, SOBRE_MI } from '../lib/data'
 import { gsap, MOV } from '../lib/motion'
+import LogoRevelar from '../components/LogoRevelar'
 
 const ROTACION = [-4, 3, -2]
 
@@ -97,6 +98,12 @@ export default function SobreMi() {
               <span className="eyebrow" style={{ color: 'var(--adobe-tinta)' }}>
                 {s.categoria}
               </span>
+              {s.logo && (
+                // Como la foto de una polaroid: el logo empieza borroso y se limpia con el cursor
+                <div className="rounded-[2px] bg-white/60 px-5 pb-7 pt-4">
+                  <LogoRevelar src={s.logo} alt={`Logo de ${s.valor}`} className="h-24" />
+                </div>
+              )}
               <p className="display text-[44px]">{s.valor}</p>
               <ul className="grid gap-1 text-sm" style={{ color: 'var(--adobe-tinta)' }}>
                 {s.detalles.map((d) => (

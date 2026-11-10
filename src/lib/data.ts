@@ -102,11 +102,12 @@ export const APRENDIENDO = ['AWS', 'Cloud', 'DAX', 'Next.js', 'Inglés intermedi
 
 export const LOGOS_MARQUEE = ['html', 'css', 'javascript', 'react', 'nodejs', 'php', 'laravel', 'java', 'mysql', 'git', 'stripe', 'csharp', 'sql', 'bi']
 
-export const SOBRE_MI = [
-  { categoria: 'Educación', valor: 'TECSUP', detalles: ['Diseño y Desarrollo de Software', 'Egresado 2023 — 2026', 'Bachiller en trámite'] },
+export const SOBRE_MI: { categoria: string; valor: string; logo?: string; detalles: string[] }[] = [
+  { categoria: 'Educación', valor: 'TECSUP', logo: '/img/logo-tecsup.webp', detalles: ['Diseño y Desarrollo de Software', 'Egresado 2023 — 2026', 'Bachiller en trámite'] },
   {
     categoria: 'Experiencia',
     valor: 'GluGlu',
+    logo: '/img/logo-gluglu.webp',
     detalles: ['Agua de Mesa · Grupo Auria S.R.L. (2025)', 'Producción, reparto y atención al cliente'],
   },
   { categoria: 'Idiomas', valor: 'ES / EN', detalles: ['Español — Nativo', 'Inglés — Intermedio (El Cultural, en curso)'] },

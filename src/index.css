@@ -780,3 +780,31 @@ button:focus-visible {
 .frase-palabra.frase-bajo {
   z-index: 10;
 }
+
+/* ---------- Logos que se limpian con el cursor (fichas de Sobre mí) ---------- */
+.logo-revelar {
+  touch-action: pan-y;
+  cursor: crosshair;
+}
+.logo-revelar-base {
+  filter: blur(9px) saturate(0.6);
+  opacity: 0.75;
+  transform: scale(1.04);
+  transition: filter 0.9s var(--ease-revelar), opacity 0.9s var(--ease-revelar), transform 0.9s var(--ease-revelar);
+}
+.logo-revelar.is-limpio {
+  cursor: default;
+}
+.logo-revelar.is-limpio .logo-revelar-base {
+  filter: none;
+  opacity: 1;
+  transform: none;
+}
+.logo-revelar-pista {
+  color: var(--adobe-tinta);
+  opacity: 0.6;
+  transition: opacity 0.4s var(--ease-ui);
+}
+.logo-revelar.is-limpio .logo-revelar-pista {
+  opacity: 0;
+}
