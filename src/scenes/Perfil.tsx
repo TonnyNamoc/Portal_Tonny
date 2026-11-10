@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef } from 'react'
 import { FRASE } from '../lib/data'
 import { gsap, ScrollTrigger, MOV } from '../lib/motion'
+import LineaScroll from '../components/LineaScroll'
 
 const GLIFOS = '{}[]()<>/=;:$#&*+_01λ'
 
@@ -58,7 +59,8 @@ export default function Perfil() {
 
   return (
     <section id="perfil" ref={root} className="mundo-noche relative grid min-h-[100svh] place-items-center overflow-hidden gutter py-24">
-      <div className="grid w-full max-w-[1200px] gap-8">
+      <LineaScroll />
+      <div className="relative z-10 grid w-full max-w-[1200px] gap-8">
         <span className="perfil-meta eyebrow text-niebla">// Perfil</span>
         <p
           ref={frase}
