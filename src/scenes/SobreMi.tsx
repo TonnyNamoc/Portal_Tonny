@@ -92,7 +92,7 @@ export default function SobreMi() {
           {SOBRE_MI.map((s, i) => (
             <article
               key={s.categoria}
-              className="ficha grid gap-4 rounded-[4px] bg-[#F3EEE6] p-6 pb-10 shadow-[0_24px_50px_rgba(14,18,24,0.18)]"
+              className="ficha grid gap-4 rounded-[4px] bg-white p-6 pb-10 shadow-[0_24px_50px_rgba(14,18,24,0.18)]"
               style={{ transform: `rotate(${ROTACION[i]}deg)` }}
             >
               <span className="eyebrow" style={{ color: 'var(--adobe-tinta)' }}>
@@ -100,7 +100,7 @@ export default function SobreMi() {
               </span>
               {s.logo && (
                 // Como la foto de una polaroid: el logo empieza borroso y se limpia con el cursor
-                <div className="rounded-[2px] bg-white/60 px-5 pb-7 pt-4">
+                <div className="px-5 pb-7 pt-4">
                   <LogoRevelar src={s.logo} alt={`Logo de ${s.valor}`} className="h-24" />
                 </div>
               )}
