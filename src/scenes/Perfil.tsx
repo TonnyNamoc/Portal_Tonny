@@ -9,14 +9,28 @@ function escapar(c: string) {
   return c.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 }
 
-/** Pinta la frase con `fijos` caracteres resueltos y el resto como código aleatorio. */
+/** Palabra de la frase que queda por DEBAJO de la cinta azul (las demás van por encima). */
+const PALABRA_BAJO = 2
+
+const PALABRAS = FRASE.split(' ')
+
+/** Pinta la frase con `fijos` caracteres resueltos y el resto como código aleatorio, palabra por palabra. */
 function pintar(el: HTMLElement, fijos: number) {
   let html = ''
-  for (let i = 0; i < FRASE.length; i++) {
-    const c = FRASE[i]
-    if (i < fijos || c === ' ' || c === '.') html += escapar(c)
-    else html += `<span class="compilando">${escapar(GLIFOS[(Math.random() * GLIFOS.length) | 0])}</span>`
-  }
+  let i = 0
+  PALABRAS.forEach((palabra, n) => {
+    if (n > 0) {
+      html += ' '
+      i++
+    }
+    html += `<span class="frase-palabra${n === PALABRA_BAJO ? ' frase-bajo' : ''}">`
+    for (const c of palabra) {
+      if (i < fijos || c === '.') html += escapar(c)
+      else html += `<span class="compilando">${escapar(GLIFOS[(Math.random() * GLIFOS.length) | 0])}</span>`
+      i++
+    }
+    html += '</span>'
+  })
   el.innerHTML = html
 }
 
@@ -39,9 +53,7 @@ export default function Perfil() {
           pin: true,
           scrub: true,
           onUpdate: (self) => pintar(el, Math.floor(Math.min(1, self.progress * 1.25) * FRASE.length)),
-          onLeave: () => {
-            el.textContent = FRASE
-          },
+          onLeave: () => pintar(el, FRASE.length),
         })
         gsap.fromTo(
           '.perfil-meta',
@@ -50,7 +62,7 @@ export default function Perfil() {
         )
         return () => {
           st.kill()
-          el.textContent = FRASE
+          pintar(el, FRASE.length)
         }
       })
     }, root)
@@ -60,16 +72,22 @@ export default function Perfil() {
   return (
     <section id="perfil" ref={root} className="mundo-noche relative grid min-h-[100svh] place-items-center overflow-hidden gutter py-24">
       <LineaScroll />
-      <div className="relative z-10 grid w-full max-w-[1200px] gap-8">
-        <span className="perfil-meta eyebrow text-niebla">// Perfil</span>
+      {/* Sin z-index aquí: así cada palabra de la frase puede ir por encima o por debajo de la cinta */}
+      <div className="relative grid w-full max-w-[1200px] gap-8">
+        <span className="perfil-meta eyebrow relative z-30 text-niebla">// Perfil</span>
         <p
           ref={frase}
           className="display text-cal text-[clamp(52px,10vw,150px)] min-h-[2.6em]"
           aria-label={FRASE}
         >
-          {FRASE}
+          {PALABRAS.map((palabra, n) => (
+            <span key={n}>
+              {n > 0 && ' '}
+              <span className={`frase-palabra${n === PALABRA_BAJO ? ' frase-bajo' : ''}`}>{palabra}</span>
+            </span>
+          ))}
         </p>
-        <p className="perfil-meta max-w-[52ch] text-niebla text-lg">
+        <p className="perfil-meta relative z-30 max-w-[52ch] text-niebla text-lg">
           Estudiante de Diseño y Desarrollo de Software con experiencia práctica en entornos reales. Orientado al detalle,
           comprometido con la calidad y construyendo proyectos web y de escritorio de punta a punta.
         </p>

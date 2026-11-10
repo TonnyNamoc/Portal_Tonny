@@ -770,3 +770,13 @@ button:focus-visible {
   background-size: 100% 3px;
   color: var(--totora);
 }
+
+/* ---------- Cinta de scroll en Perfil ---------- */
+/* La cinta va en z-20: las palabras de la frase pasan por encima y la marcada, por debajo */
+.frase-palabra {
+  position: relative;
+  z-index: 30;
+}
+.frase-palabra.frase-bajo {
+  z-index: 10;
+}

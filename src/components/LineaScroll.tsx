@@ -15,35 +15,20 @@ const RECORRIDO = {
     'M440 50 C330 30 300 140 360 220 C420 300 390 420 350 520 C310 620 150 660 160 770 C170 880 330 850 300 770 C270 690 110 760 40 960',
 }
 
-/** Zona (en coordenadas del lienzo) donde la cinta pasa POR DELANTE del texto. En el resto va por detrás. */
-const DELANTE = {
-  ancho: { x: 560, y: 400, w: 360, h: 140 },
-  movil: { x: 0, y: 700, w: 400, h: 90 },
-}
-
 type Variante = keyof typeof RECORRIDO
 
-function Cinta({ v, capa }: { v: Variante; capa: 'atras' | 'delante' }) {
+function Cinta({ v }: { v: Variante }) {
   const [w, h] = v === 'ancho' ? [1440, 900] : [400, 900]
   const grosor = v === 'ancho' ? 34 : 16
-  const z = DELANTE[v]
-  const clip = `linea-clip-${v}`
   return (
     <svg
-      className={`linea-scroll linea-${v} linea-${capa} pointer-events-none absolute inset-0 h-full w-full`}
+      className={`linea-scroll linea-${v} pointer-events-none absolute inset-0 h-full w-full`}
       viewBox={`0 0 ${w} ${h}`}
       preserveAspectRatio="xMidYMid slice"
       aria-hidden="true"
       focusable="false"
     >
-      {capa === 'delante' && (
-        <defs>
-          <clipPath id={clip}>
-            <rect x={z.x} y={z.y} width={z.w} height={z.h} />
-          </clipPath>
-        </defs>
-      )}
-      <g clipPath={capa === 'delante' ? `url(#${clip})` : undefined} fill="none" strokeLinecap="round" strokeLinejoin="round">
+      <g fill="none" strokeLinecap="round" strokeLinejoin="round">
         {/* Cuerpo de la cinta */}
         <path className="linea-trazo" d={RECORRIDO[v]} stroke="var(--pacifico)" strokeWidth={grosor} />
         {/* Brillo fino desplazado: le da un poco de volumen, como un tubo */}
@@ -62,8 +47,8 @@ function Cinta({ v, capa }: { v: Variante; capa: 'atras' | 'delante' }) {
 
 /**
  * Cinta azul que se dibuja con el scroll y luego se borra por la cola mientras la sección se va.
- * Va dentro de una sección con `position: relative`; el contenido de la sección debe ir con z-10
- * para que la capa de atrás quede detrás y la de delante (z-20) por encima.
+ * Va dentro de una sección con `position: relative`, en z-20. Lo que deba quedar por encima de la
+ * cinta lleva z-30 y lo que deba quedar por debajo, z-10 (en Perfil, palabra por palabra).
  */
 export default function LineaScroll() {
   const root = useRef<HTMLDivElement>(null)
@@ -103,18 +88,12 @@ export default function LineaScroll() {
   }, [])
 
   return (
-    <div ref={root} className="linea-contenedor" aria-hidden="true">
-      <div className="absolute inset-0 z-0 hidden md:block">
-        <Cinta v="ancho" capa="atras" />
+    <div ref={root} className="linea-contenedor pointer-events-none absolute inset-0 z-20" aria-hidden="true">
+      <div className="absolute inset-0 hidden md:block">
+        <Cinta v="ancho" />
       </div>
-      <div className="absolute inset-0 z-20 hidden md:block">
-        <Cinta v="ancho" capa="delante" />
-      </div>
-      <div className="absolute inset-0 z-0 md:hidden">
-        <Cinta v="movil" capa="atras" />
-      </div>
-      <div className="absolute inset-0 z-20 md:hidden">
-        <Cinta v="movil" capa="delante" />
+      <div className="absolute inset-0 md:hidden">
+        <Cinta v="movil" />
       </div>
     </div>
   )
