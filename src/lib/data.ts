@@ -4,6 +4,7 @@ export const SECCIONES = [
   { id: 'inicio', label: 'Inicio' },
   { id: 'perfil', label: 'Perfil' },
   { id: 'proyectos', label: 'Proyectos' },
+  { id: 'webs', label: 'Webs' },
   { id: 'habilidades', label: 'Habilidades' },
   { id: 'sobre-mi', label: 'Sobre mí' },
   { id: 'certificados', label: 'Certificados' },
@@ -74,6 +75,13 @@ export const PROYECTOS: Proyecto[] = [
     participacion: true,
     codigoPrivado: true,
   },
+]
+
+/** Webs de clientes hechas con Shanty Studios */
+export const WEBS = [
+  { nombre: 'ZUNBE', rubro: 'Miel 100% pura', img: '/img/webs/zunbe.webp', url: 'https://new-version-zumbee.vercel.app/' },
+  { nombre: 'Evergold', rubro: 'Joyería fina', img: '/img/webs/evergold.webp', url: 'https://evergold-lime.vercel.app/' },
+  { nombre: 'KOVA', rubro: 'Tecnología y gadgets', img: '/img/webs/kova.webp', url: 'https://kova-andy-pro.vercel.app/' },
 ]
 
 export const CICLOS = ['2023', '2024', '2025', '2026']

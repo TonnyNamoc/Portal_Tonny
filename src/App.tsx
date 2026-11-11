@@ -6,6 +6,7 @@ import BotonAnimaciones from './components/BotonAnimaciones'
 import Hero from './scenes/Hero'
 import Perfil from './scenes/Perfil'
 import Proyectos from './scenes/Proyectos'
+import WebsShanty from './scenes/WebsShanty'
 import Habilidades from './scenes/Habilidades'
 import SobreMi from './scenes/SobreMi'
 import Certificados from './scenes/Certificados'
@@ -32,6 +33,7 @@ export default function App() {
         <Hero listo={listo} />
         <Perfil />
         <Proyectos />
+        <WebsShanty />
         <Habilidades />
         <SobreMi />
         <Certificados />

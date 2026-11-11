@@ -808,3 +808,17 @@ button:focus-visible {
 .logo-revelar.is-limpio .logo-revelar-pista {
   opacity: 0;
 }
+
+/* ---------- Webs con Shanty Studios ---------- */
+.web-marco {
+  overflow: hidden;
+  border-radius: 10px;
+  background: #121826;
+  box-shadow: inset 0 0 0 1px rgba(200, 212, 90, 0.35), 0 30px 60px rgba(0, 0, 0, 0.45);
+  transition: box-shadow 0.3s var(--ease-ui), transform 0.5s var(--ease-revelar);
+}
+.web-card:hover .web-marco,
+.web-card:focus-visible .web-marco {
+  box-shadow: inset 0 0 0 1px var(--totora), 0 36px 70px rgba(0, 0, 0, 0.5);
+  transform: translateY(-6px);
+}

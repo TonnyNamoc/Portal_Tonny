@@ -84,7 +84,7 @@ export default function Contacto() {
 
         <div className="grid content-center gap-8 lg:pl-10">
           <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
-            <span className="eyebrow text-niebla">Escena 07 · Contacto</span>
+            <span className="eyebrow text-niebla">Escena 08 · Contacto</span>
             {CONTACTO.disponible && (
               <span className="disponible">
                 <i className="punto-vivo" aria-hidden="true" />

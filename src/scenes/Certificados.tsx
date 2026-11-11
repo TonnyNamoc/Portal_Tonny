@@ -191,7 +191,7 @@ export default function Certificados() {
     <section id="certificados" ref={root} className="mundo-noche relative overflow-hidden pt-28 md:pt-40">
       <div className="mx-auto grid max-w-[1400px] items-end gap-8 gutter lg:grid-cols-[1fr_auto]">
         <div className="grid gap-6">
-          <span className="eyebrow text-niebla">Escena 06 · Certificados</span>
+          <span className="eyebrow text-niebla">Escena 07 · Certificados</span>
           <h2 className="display text-[clamp(64px,10vw,160px)] leading-[0.85] text-cal">
             <span className="block overflow-hidden">
               <span className="cert-linea block">Sigo</span>

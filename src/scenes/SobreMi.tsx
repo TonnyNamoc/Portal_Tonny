@@ -54,7 +54,7 @@ export default function SobreMi() {
       <div className="mx-auto grid max-w-[1200px] gap-16">
         <div className="grid gap-6">
           <span className="eyebrow" style={{ color: 'var(--adobe-tinta)' }}>
-            Escena 05 · Sobre mí
+            Escena 06 · Sobre mí
           </span>
           <h2 className="display text-[clamp(52px,9vw,132px)]">
             <span className="block overflow-hidden">
