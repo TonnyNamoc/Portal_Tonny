@@ -822,3 +822,89 @@ button:focus-visible {
   box-shadow: inset 0 0 0 1px var(--totora), 0 36px 70px rgba(0, 0, 0, 0.5);
   transform: translateY(-6px);
 }
+
+/* ---------- Sala secreta de edición (easter egg) ---------- */
+.sala-ruido {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+  opacity: 0.08;
+  animation: sala-ruido 0.4s steps(4) infinite;
+}
+@keyframes sala-ruido {
+  0% { background-position: 0 0; }
+  25% { background-position: -40px 25px; }
+  50% { background-position: 30px -50px; }
+  75% { background-position: -20px 60px; }
+  100% { background-position: 0 0; }
+}
+.sala-lineas {
+  background: repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 3px);
+}
+.sala-cursor {
+  display: inline-block;
+  width: 0.08em;
+  height: 0.8em;
+  margin-left: 0.06em;
+  vertical-align: -0.05em;
+  background: var(--peligro);
+  animation: sala-parpadeo 0.9s steps(1) infinite;
+}
+@keyframes sala-parpadeo {
+  50% { opacity: 0; }
+}
+.carga-cabezal {
+  width: 2px;
+  background: #e5484d;
+  box-shadow: 0 0 10px rgba(229, 72, 77, 0.8);
+}
+.carga-cabezal::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: -5px;
+  border: 6px solid transparent;
+  border-top-color: #e5484d;
+}
+.sala-clip {
+  transition: filter 0.2s var(--ease-ui), box-shadow 0.2s var(--ease-ui);
+  filter: saturate(0.6) brightness(0.8);
+}
+.sala-clip:hover,
+.sala-clip.is-activo {
+  filter: none;
+}
+.sala-clip.is-activo {
+  box-shadow: inset 0 0 0 2px #fff;
+}
+.sala-cerrar {
+  padding: 8px 12px;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+  transition: background 0.2s var(--ease-ui);
+}
+.sala-cerrar:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+/* Candado del pie de página: casi invisible, solo para curiosos */
+.candado {
+  display: inline-grid;
+  place-items: center;
+  margin-left: 6px;
+  vertical-align: -2px;
+  opacity: 0.35;
+  animation: candado 4s var(--ease-ui) infinite;
+  transition: opacity 0.2s, color 0.2s;
+}
+.candado:hover,
+.candado:focus-visible {
+  opacity: 1;
+  color: var(--peligro);
+  animation: none;
+}
+@keyframes candado {
+  0%, 86%, 100% { opacity: 0.35; }
+  90% { opacity: 0.9; }
+  94% { opacity: 0.2; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sala-ruido, .candado, .sala-cursor { animation: none; }
+}

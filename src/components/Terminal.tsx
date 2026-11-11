@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { APRENDIENDO, CERTIFICADOS, CONTACTO, HABILIDADES, PROYECTOS, SECCIONES } from '../lib/data'
+import { abrirSala } from './SalaEdicion'
 import { gsap, prefersReducedMotion, scrollToId, stopScroll } from '../lib/motion'
 
 type Linea = { texto: string; tipo?: 'cmd' | 'err' | 'ok' | 'dim' }
@@ -77,6 +78,12 @@ function ejecutar(entrada: string, cerrar: () => void): Linea[] | 'clear' {
     case 'salir':
       cerrar()
       return []
+    case 'skill':
+    case 'edicion':
+    case 'edición':
+      cerrar()
+      setTimeout(abrirSala, 300)
+      return [{ texto: 'Abriendo una puerta que no deberías abrir…', tipo: 'ok' }]
     case 'sudo':
       return [{ texto: 'Permiso denegado. Pero puedes contratarme: escribe "contacto".', tipo: 'err' }]
     default:

@@ -1,4 +1,5 @@
 import { useLayoutEffect, useRef, useState } from 'react'
+import { Candado } from '../components/SalaEdicion'
 import Monograma from '../components/Monograma'
 import RollLink from '../components/RollLink'
 import { CONTACTO, SECCIONES } from '../lib/data'
@@ -77,6 +78,7 @@ export default function Contacto() {
           </div>
           <p className="mono text-[11px] leading-relaxed text-niebla">
             © {new Date().getFullYear()} {CONTACTO.nombreCompleto}
+            <Candado />
             <br />
             Hecho en Trujillo
           </p>
@@ -124,6 +126,10 @@ export default function Contacto() {
               <span className="text-lg md:text-xl">{CONTACTO.ciudad}</span>
             </div>
           </div>
+          <p className="mono text-[11px] text-niebla lg:hidden">
+            © {new Date().getFullYear()} {CONTACTO.nombreCompleto}
+            <Candado />
+          </p>
         </div>
       </div>
 

@@ -84,6 +84,13 @@ export const WEBS = [
   { nombre: 'KOVA', rubro: 'Tecnología y gadgets', img: '/img/webs/kova.webp', url: 'https://kova-andy-pro.vercel.app/' },
 ]
 
+/** Videos de la sala secreta de edición */
+export const VIDEOS = [
+  { titulo: 'Goti · GluGlu', tipo: 'Comercial animado', dur: 82, src: '/videos/sala/goti.mp4', poster: '/videos/sala/goti.jpg', tags: ['Animación', 'Subtítulos', 'Ritmo'], color: '#2e6bff' },
+  { titulo: 'Reel de Esfran', tipo: 'Reel para redes', dur: 34, src: '/videos/sala/esfran.mp4', poster: '/videos/sala/esfran.jpg', tags: ['Cortes', 'Subtítulos dinámicos', 'Gráficos'], color: '#e5484d' },
+  { titulo: 'Escribe PROMPT', tipo: 'Explicativo sin voz', dur: 22, src: '/videos/sala/prompt.mp4', poster: '/videos/sala/prompt.jpg', tags: ['Textos animados', 'Tipografía'], color: '#c8d45a' },
+]
+
 export const CICLOS = ['2023', '2024', '2025', '2026']
 
 export interface Habilidad {
