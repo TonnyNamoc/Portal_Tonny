@@ -911,7 +911,10 @@ button:focus-visible {
 
 /* ---------- Sala secreta: carrusel 3D rojo ---------- */
 .carr {
-  background: radial-gradient(120% 90% at 70% 50%, #d8262f 0%, #9e0f17 45%, #3a0306 100%);
+  --carr-1: #4cc3f0;
+  --carr-2: #1479b8;
+  --carr-3: #052a44;
+  background: radial-gradient(120% 90% at 70% 50%, var(--carr-1) 0%, var(--carr-2) 45%, var(--carr-3) 100%);
   color: #fff;
 }
 .carr-fondo-texto {
@@ -946,7 +949,7 @@ button:focus-visible {
   overflow: hidden;
   border-radius: 16px;
   background: #1a0204;
-  box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.35), 0 40px 80px rgba(40, 0, 3, 0.6);
+  box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.35), 0 40px 80px rgba(0, 0, 0, 0.45);
   transform-style: preserve-3d;
 }
 .carr-brillo {
@@ -978,7 +981,7 @@ button:focus-visible {
 .carr-flecha:hover,
 .carr-flecha:focus-visible {
   background: #fff;
-  color: #9e0f17;
+  color: var(--carr-2);
 }
 .carr-sonido {
   padding: 12px 16px;
@@ -987,5 +990,5 @@ button:focus-visible {
 }
 .carr-sonido[aria-pressed='true'] {
   background: #fff;
-  color: #9e0f17;
+  color: var(--carr-2);
 }

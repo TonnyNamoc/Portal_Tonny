@@ -86,9 +86,9 @@ export const WEBS = [
 
 /** Videos de la sala secreta de edición */
 export const VIDEOS = [
-  { titulo: 'Goti · GluGlu', tipo: 'Comercial animado', dur: 82, src: '/videos/sala/goti.mp4', poster: '/videos/sala/goti.jpg', tags: ['Animación', 'Subtítulos', 'Ritmo'], color: '#2e6bff' },
-  { titulo: 'Reel de Esfran', tipo: 'Reel para redes', dur: 34, src: '/videos/sala/esfran.mp4', poster: '/videos/sala/esfran.jpg', tags: ['Cortes', 'Subtítulos dinámicos', 'Gráficos'], color: '#e5484d' },
-  { titulo: 'Escribe PROMPT', tipo: 'Explicativo sin voz', dur: 22, src: '/videos/sala/prompt.mp4', poster: '/videos/sala/prompt.jpg', tags: ['Textos animados', 'Tipografía'], color: '#c8d45a' },
+  { titulo: 'Goti · GluGlu', tipo: 'Comercial animado', dur: 82, src: '/videos/sala/goti.mp4', poster: '/videos/sala/goti.jpg', tags: ['Animación', 'Subtítulos', 'Ritmo'], color: '#2e6bff', fondo: ['#4cc3f0', '#1479b8', '#052a44'] },
+  { titulo: 'Reel de Esfran', tipo: 'Reel para redes', dur: 34, src: '/videos/sala/esfran.mp4', poster: '/videos/sala/esfran.jpg', tags: ['Cortes', 'Subtítulos dinámicos', 'Gráficos'], color: '#e5484d', fondo: ['#d8262f', '#9e0f17', '#3a0306'] },
+  { titulo: 'Escribe PROMPT', tipo: 'Explicativo sin voz', dur: 22, src: '/videos/sala/prompt.mp4', poster: '/videos/sala/prompt.jpg', tags: ['Textos animados', 'Tipografía'], color: '#c8d45a', fondo: ['#ff8f45', '#d4541a', '#4a1804'] },
 ]
 
 export const CICLOS = ['2023', '2024', '2025', '2026']

@@ -41,6 +41,9 @@ export default function CarruselVideos({ alCerrar }: { alCerrar: () => void }) {
           ease: 'expo.out',
         })
       })
+      // El fondo toma el color de cada video
+      const [c1, c2, c3] = VIDEOS[activa].fondo
+      gsap.to(root.current, { '--carr-1': c1, '--carr-2': c2, '--carr-3': c3, duration: quieto ? 0 : 1, ease: 'power2.inOut' })
       gsap.to('.carr-fondo-texto', { xPercent: -8 * activa, duration: quieto ? 0 : 1.4, ease: 'expo.out' })
     },
     [n, quieto]
