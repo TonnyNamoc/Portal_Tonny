@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { VIDEOS } from '../lib/data'
+import CarruselVideos from './CarruselVideos'
 import { gsap, prefersReducedMotion, stopScroll } from '../lib/motion'
 
 /**
@@ -41,11 +42,8 @@ const TOTAL = VIDEOS.reduce((a, v) => a + v.dur, 0)
 export default function SalaEdicion() {
   const [fase, setFase] = useState<Fase>(null)
   const [texto, setTexto] = useState('')
-  const [actual, setActual] = useState(0)
-  const [tiempo, setTiempo] = useState(0)
   const [carga, setCarga] = useState(0)
   const root = useRef<HTMLDivElement>(null)
-  const video = useRef<HTMLVideoElement>(null)
   const volverA = useRef<HTMLElement | null>(null)
 
   const cerrar = useCallback(() => {
@@ -140,33 +138,7 @@ export default function SalaEdicion() {
     return () => ctx.revert()
   }, [fase])
 
-  // Fase 3: entra la sala con un corte seco
-  useLayoutEffect(() => {
-    if (fase !== 'sala' || prefersReducedMotion()) return
-    const ctx = gsap.context(() => {
-      gsap
-        .timeline()
-        .from('.sala-panel', { opacity: 0, y: 20, stagger: 0.08, duration: 0.6, ease: 'expo.out' })
-        .from('.sala-clip', { scaleX: 0, transformOrigin: 'left center', stagger: 0.07, duration: 0.5, ease: 'expo.out' }, 0.15)
-    }, root)
-    return () => ctx.revert()
-  }, [fase])
-
-  // Reproduce el clip elegido (con sonido si el navegador deja; si no, silenciado)
-  useEffect(() => {
-    const v = video.current
-    if (fase !== 'sala' || !v) return
-    v.muted = false
-    v.play().catch(() => {
-      v.muted = true
-      v.play().catch(() => {})
-    })
-  }, [fase, actual])
-
   if (!fase) return null
-
-  const inicioClip = VIDEOS.slice(0, actual).reduce((a, v) => a + v.dur, 0)
-  const v = VIDEOS[actual]
 
   return (
     <div
@@ -239,88 +211,7 @@ export default function SalaEdicion() {
         </div>
       )}
 
-      {fase === 'sala' && (
-        <div className="relative grid h-full grid-rows-[auto_1fr_auto] gap-4 p-4 md:p-6">
-          <header className="sala-panel flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <span className="h-2.5 w-2.5 rounded-full" style={{ background: '#e5484d' }} aria-hidden="true" />
-              <h2 className="mono text-xs uppercase tracking-[0.2em] text-white/70">Sala de edición · nueva skill en desarrollo</h2>
-            </div>
-            <button type="button" className="sala-cerrar mono text-xs uppercase tracking-[0.2em]" onClick={cerrar} aria-label="Cerrar la sala y volver a la web">
-              Salir ✕
-            </button>
-          </header>
-
-          <div className="grid min-h-0 gap-6 md:grid-cols-[1fr_minmax(240px,320px)]">
-            <div className="sala-panel relative min-h-[50vh] overflow-hidden rounded-lg bg-white/[0.03] md:min-h-0">
-              <video
-                key={v.src}
-                ref={video}
-                src={v.src}
-                poster={v.poster}
-                controls
-                playsInline
-                preload="metadata"
-                className="absolute inset-2 h-[calc(100%-1rem)] w-[calc(100%-1rem)] object-contain"
-                onTimeUpdate={(e) => setTiempo(e.currentTarget.currentTime)}
-                onEnded={() => setActual((a) => (a + 1) % VIDEOS.length)}
-              />
-            </div>
-            <aside className="sala-panel hidden content-start gap-4 md:grid">
-              <span className="eyebrow" style={{ color: v.color }}>
-                Clip {String(actual + 1).padStart(2, '0')} · {v.tipo}
-              </span>
-              <p className="display text-[44px] leading-none">{v.titulo}</p>
-              <ul className="flex flex-wrap gap-2">
-                {v.tags.map((t) => (
-                  <li key={t} className="mono rounded-full bg-white/10 px-3 py-1.5 text-[11px]">
-                    {t}
-                  </li>
-                ))}
-              </ul>
-              <p className="text-sm text-white/60">Estoy aprendiendo edición de video. Estos son mis primeros trabajos; elige un clip abajo.</p>
-            </aside>
-          </div>
-
-          {/* Línea de tiempo: cada clip es un video */}
-          <div className="sala-panel grid gap-2 rounded-md border border-white/15 bg-white/[0.04] p-3">
-            <div className="mono flex justify-between text-[11px] text-white/60">
-              <span className="truncate">{v.titulo}</span>
-              <span className="tabular-nums" style={{ color: 'var(--peligro)' }}>
-                {tc(inicioClip + tiempo)}
-              </span>
-            </div>
-            <div className="relative flex h-14 gap-1">
-              {VIDEOS.map((c, i) => (
-                <button
-                  key={c.src}
-                  type="button"
-                  onClick={() => {
-                    setTiempo(0)
-                    setActual(i)
-                  }}
-                  aria-label={`Ver ${c.titulo}`}
-                  aria-current={i === actual}
-                  className={`sala-clip relative overflow-hidden rounded-[4px] text-left ${i === actual ? 'is-activo' : ''}`}
-                  style={{ flexGrow: c.dur, flexBasis: 0, background: c.color }}
-                >
-                  <span
-                    className="absolute inset-0 bg-cover bg-center opacity-40 mix-blend-luminosity"
-                    style={{ backgroundImage: `url(${c.poster})`, backgroundSize: 'auto 100%', backgroundRepeat: 'repeat-x' }}
-                    aria-hidden="true"
-                  />
-                  <span className="mono relative z-[1] block truncate px-2 pt-1.5 text-[10px] font-bold uppercase text-black/80">{c.titulo}</span>
-                </button>
-              ))}
-              <span
-                className="carga-cabezal pointer-events-none absolute -bottom-1 -top-1"
-                style={{ left: `${((inicioClip + tiempo) / TOTAL) * 100}%` }}
-                aria-hidden="true"
-              />
-            </div>
-          </div>
-        </div>
-      )}
+      {fase === 'sala' && <CarruselVideos alCerrar={cerrar} />}
     </div>
   )
 }
