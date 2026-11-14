@@ -9,13 +9,15 @@ const MASCARA = '/img/lentes-mascara.png'
 const IMG = { w: 1122, h: 1402 }
 // Recorte de la máscara de los lentes dentro de la foto
 const LENTES = { x: 372, y: 412, w: 369, h: 131 }
-// Lente izquierdo: centro y medio ancho/alto útil (sin las esquinas redondeadas)
-const LENTE = { cx: 466, cy: 478, rx: 78, ry: 50 }
+// Puente entre los dos lentes: el punto hacia donde se cierra el efecto, para que quede simétrico
+// Tramo del alejamiento (0 a 1) en el que se cierra el iris
+const IRIS = { desde: 0.08, hasta: 0.62 }
+const PUENTE = { x: LENTES.x + LENTES.w / 2, y: LENTES.y + LENTES.h / 2 }
 
 /**
  * Escena 1 · noche.
- * Arranca con el video de código a pantalla completa y la firma (nombre y rol) encima. Al hacer scroll la cámara se aleja:
- * el video se encoge hasta quedar dentro de los lentes de la foto y, cuando ya se te ve
+ * Arranca con el video de código a pantalla completa y la firma (nombre y rol) encima. Al hacer scroll la cámara se aleja
+ * desde el centro de los lentes: el video se cierra de forma simétrica hasta quedar dentro de los dos lentes y, cuando ya se te ve
  * entero, TONNY NAMOC aparece detrás.
  */
 export default function Hero({ listo }: { listo: boolean }) {
@@ -31,30 +33,41 @@ export default function Hero({ listo }: { listo: boolean }) {
     const video = sec.querySelector<HTMLElement>('.hero-lente')!
     const zoom = { m: 1 }
 
-    // Coloca la máscara de los lentes sobre la foto; m = 0 cubre la pantalla, m = 1 queda en los lentes
+    // Aleja la cámara desde el puente de los lentes. m = 0: muy cerca, el video llena la pantalla;
+    // m = 1: la foto entera con el video dentro de los lentes. La foto y la máscara usan la misma
+    // escala, así el video nunca se despega de los lentes.
     const colocar = () => {
+      const vw = window.innerWidth
+      const vh = window.innerHeight
+      const k0 = foto.offsetWidth / IMG.w
+      // Al empezar, el par de lentes mide 1.5 veces el ancho de la pantalla
+      const s0 = Math.max(1, (1.5 * vw) / (LENTES.w * k0))
+      const s = Math.pow(s0, 1 - zoom.m) // zoom en escala logarítmica: se siente parejo
+      gsap.set(foto, { scale: s })
+
       // Coordenadas relativas a la sección, para que sigan valiendo cuando deja de estar fija
       const r = foto.getBoundingClientRect()
       const base = sec.getBoundingClientRect()
       const k = r.width / IMG.w
-      const cx = r.left - base.left + LENTE.cx * k
-      const cy = r.top - base.top + LENTE.cy * k
-      const vw = window.innerWidth
-      const vh = window.innerHeight
-      const s0 = Math.max(cx / (LENTE.rx * k), (vw - cx) / (LENTE.rx * k), cy / (LENTE.ry * k), (vh - cy) / (LENTE.ry * k)) * 1.05
-      const s = Math.pow(s0, 1 - zoom.m) // zoom en escala logarítmica: se siente parejo
-      const w = LENTES.w * k * s
-      const h = LENTES.h * k * s
-      const x = cx + (LENTES.x - LENTE.cx) * k * s
-      const y = cy + (LENTES.y - LENTE.cy) * k * s
-      video.style.setProperty('--mw', `${w}px`)
-      video.style.setProperty('--mh', `${h}px`)
-      video.style.setProperty('--mx', `${x}px`)
-      video.style.setProperty('--my', `${y}px`)
+      const bx = r.left - base.left + PUENTE.x * k
+      const by = r.top - base.top + PUENTE.y * k
+      video.style.setProperty('--mw', `${LENTES.w * k}px`)
+      video.style.setProperty('--mh', `${LENTES.h * k}px`)
+      video.style.setProperty('--mx', `${r.left - base.left + LENTES.x * k}px`)
+      video.style.setProperty('--my', `${r.top - base.top + LENTES.y * k}px`)
+
+      // Iris: un círculo de video centrado en el puente que cubre la pantalla al inicio
+      // y se cierra hasta dejar solo los dos lentes
+      const lejos = Math.hypot(Math.max(bx, vw - bx), Math.max(by, vh - by))
+      const t = Math.min(1, Math.max(0, (zoom.m - IRIS.desde) / (IRIS.hasta - IRIS.desde)))
+      const radio = lejos * 1.05 * Math.pow(1 - t, 1.6)
+      video.style.setProperty('--bx', `${bx}px`)
+      video.style.setProperty('--by', `${by}px`)
+      video.style.setProperty('--ir', t >= 1 ? '-40px' : `${radio}px`)
     }
 
     const ctx = gsap.context(() => {
-      gsap.set(foto, { xPercent: -50, transformOrigin: `${(LENTE.cx / IMG.w) * 100}% ${(LENTE.cy / IMG.h) * 100}%` })
+      gsap.set(foto, { xPercent: -50, transformOrigin: `${(PUENTE.x / IMG.w) * 100}% ${(PUENTE.y / IMG.h) * 100}%` })
       const mm = gsap.matchMedia()
       mm.add(MOV(), () => {
         zoom.m = 0
@@ -75,7 +88,6 @@ export default function Hero({ listo }: { listo: boolean }) {
           .to('.scroll-hint-wrap', { opacity: 0, duration: 0.05 }, 0)
           .to('.hero-firma', { opacity: 0, y: -20, duration: 0.14, ease: 'power1.in' }, 0.04)
           .fromTo(zoom, { m: 0 }, { m: 1, duration: 0.6, ease: 'power1.inOut' }, 0)
-          .fromTo(foto, { scale: 1.9 }, { scale: 1, duration: 0.6, ease: 'power1.inOut' }, 0)
           .fromTo('.hero-letra', { yPercent: 110 }, { yPercent: 0, duration: 0.25, stagger: 0.015, ease: 'power3.out' }, 0.55)
           .fromTo('.hero-side', { opacity: 0, y: 24 }, { opacity: 1, y: 0, stagger: 0.05, duration: 0.15 }, 0.8)
           .to({}, { duration: 0.1 })
@@ -138,14 +150,14 @@ export default function Hero({ listo }: { listo: boolean }) {
         className="hero-lente pointer-events-none absolute inset-0"
         aria-hidden="true"
         style={{
-          WebkitMaskImage: `url(${MASCARA})`,
-          maskImage: `url(${MASCARA})`,
+          WebkitMaskImage: `url(${MASCARA}), radial-gradient(circle at var(--bx) var(--by), #000 var(--ir), transparent calc(var(--ir) + 24px))`,
+          maskImage: `url(${MASCARA}), radial-gradient(circle at var(--bx) var(--by), #000 var(--ir), transparent calc(var(--ir) + 24px))`,
           WebkitMaskRepeat: 'no-repeat',
           maskRepeat: 'no-repeat',
-          WebkitMaskSize: 'var(--mw) var(--mh)',
-          maskSize: 'var(--mw) var(--mh)',
-          WebkitMaskPosition: 'var(--mx) var(--my)',
-          maskPosition: 'var(--mx) var(--my)',
+          WebkitMaskSize: 'var(--mw) var(--mh), 100% 100%',
+          maskSize: 'var(--mw) var(--mh), 100% 100%',
+          WebkitMaskPosition: 'var(--mx) var(--my), 0 0',
+          maskPosition: 'var(--mx) var(--my), 0 0',
         }}
       >
         <video className="hero-video" autoPlay muted loop playsInline preload="auto" poster={VIDEO.poster}>
