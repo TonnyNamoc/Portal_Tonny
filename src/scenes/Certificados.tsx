@@ -321,7 +321,7 @@ export default function Certificados() {
       </div>
 
       {/* Controles */}
-      <div className="relative z-10 flex items-center justify-center gap-4 gutter max-sm:justify-end pb-24 pt-6 md:pb-32">
+      <div className="cert-controles relative z-10 flex items-center justify-center gap-4 gutter max-sm:justify-end pb-24 pt-6 md:pb-32">
         <button type="button" className="btn btn-ghost text-cal max-sm:hidden" onClick={() => saltar(-1)} aria-label="Certificado anterior">
           ←
         </button>

@@ -1435,3 +1435,31 @@ html.quieto :is(.flotar, .marquee-track, .panel-flota, .scroll-hint) {
   font-size: clamp(17px, calc(var(--R) * 0.115), 36px);
   line-height: 1.05;
 }
+/* Controles sin cajas: una etiqueta subrayada en dorado y flechas sueltas */
+[data-modo='gala'] .cert-controles {
+  justify-content: center;
+  gap: 28px;
+}
+[data-modo='gala'] .cert-controles .btn {
+  padding: 10px 2px;
+  background: none;
+  color: var(--cal);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  box-shadow: inset 0 -1px 0 var(--oro);
+  transition: color 0.25s var(--ease-ui);
+}
+[data-modo='gala'] .cert-controles .btn:hover {
+  background: none;
+  color: var(--oro);
+}
+[data-modo='gala'] .cert-controles .btn-ghost {
+  padding: 10px 8px;
+  color: var(--oro);
+  font-size: 20px;
+  letter-spacing: 0;
+  box-shadow: none;
+}
+[data-modo='gala'] .cert-controles .btn-ghost:hover {
+  color: var(--cal);
+}
