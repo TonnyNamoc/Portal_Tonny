@@ -10,8 +10,8 @@ const IMG = { w: 1122, h: 1402 }
 // Recorte de la máscara de los lentes dentro de la foto
 const LENTES = { x: 372, y: 412, w: 369, h: 131 }
 // Puente entre los dos lentes: el punto hacia donde se cierra el efecto, para que quede simétrico
-// Tramo del alejamiento (0 a 1) en el que se cierra el iris
-const IRIS = { desde: 0.08, hasta: 0.62 }
+// Tramo del alejamiento (0 a 1) en el que actúa el visor, y qué parte de ese tramo usa para encogerse
+const VISOR = { desde: 0.08, hasta: 0.7, encoge: 0.72 }
 const PUENTE = { x: LENTES.x + LENTES.w / 2, y: LENTES.y + LENTES.h / 2 }
 
 /**
@@ -56,14 +56,19 @@ export default function Hero({ listo }: { listo: boolean }) {
       video.style.setProperty('--mx', `${r.left - base.left + LENTES.x * k}px`)
       video.style.setProperty('--my', `${r.top - base.top + LENTES.y * k}px`)
 
-      // Iris: un círculo de video centrado en el puente que cubre la pantalla al inicio
-      // y se cierra hasta dejar solo los dos lentes
-      const lejos = Math.hypot(Math.max(bx, vw - bx), Math.max(by, vh - by))
-      const t = Math.min(1, Math.max(0, (zoom.m - IRIS.desde) / (IRIS.hasta - IRIS.desde)))
-      const radio = lejos * 1.05 * Math.pow(1 - t, 1.6)
+      // Visor: un óvalo de video centrado en el puente que cubre la pantalla al inicio, se encoge
+      // hasta abarcar justo los dos lentes y ahí se desvanece. Nunca queda como un punto entre ellos.
+      const rx1 = LENTES.w * k * 0.6
+      const ry1 = LENTES.h * k * 0.85
+      const cubre = Math.hypot(Math.max(bx, vw - bx) / rx1, Math.max(by, vh - by) / ry1) * 1.1
+      const t = Math.min(1, Math.max(0, (zoom.m - VISOR.desde) / (VISOR.hasta - VISOR.desde)))
+      const f = 1 + Math.max(0, cubre - 1) * Math.pow(1 - Math.min(1, t / VISOR.encoge), 1.6)
+      const alfa = 1 - Math.min(1, Math.max(0, (t - VISOR.encoge) / (1 - VISOR.encoge)))
       video.style.setProperty('--bx', `${bx}px`)
       video.style.setProperty('--by', `${by}px`)
-      video.style.setProperty('--ir', t >= 1 ? '-40px' : `${radio}px`)
+      video.style.setProperty('--vrx', `${rx1 * f}px`)
+      video.style.setProperty('--vry', `${ry1 * f}px`)
+      video.style.setProperty('--va', alfa.toFixed(3))
     }
 
     const ctx = gsap.context(() => {
@@ -150,8 +155,8 @@ export default function Hero({ listo }: { listo: boolean }) {
         className="hero-lente pointer-events-none absolute inset-0"
         aria-hidden="true"
         style={{
-          WebkitMaskImage: `url(${MASCARA}), radial-gradient(circle at var(--bx) var(--by), #000 var(--ir), transparent calc(var(--ir) + 24px))`,
-          maskImage: `url(${MASCARA}), radial-gradient(circle at var(--bx) var(--by), #000 var(--ir), transparent calc(var(--ir) + 24px))`,
+          WebkitMaskImage: `url(${MASCARA}), radial-gradient(ellipse var(--vrx) var(--vry) at var(--bx) var(--by), rgba(0,0,0,var(--va)) 88%, transparent 100%)`,
+          maskImage: `url(${MASCARA}), radial-gradient(ellipse var(--vrx) var(--vry) at var(--bx) var(--by), rgba(0,0,0,var(--va)) 88%, transparent 100%)`,
           WebkitMaskRepeat: 'no-repeat',
           maskRepeat: 'no-repeat',
           WebkitMaskSize: 'var(--mw) var(--mh), 100% 100%',
