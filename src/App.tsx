@@ -12,13 +12,31 @@ import Habilidades from './scenes/Habilidades'
 import SobreMi from './scenes/SobreMi'
 import Certificados from './scenes/Certificados'
 import Contacto from './scenes/Contacto'
-import { ScrollTrigger, startSmoothScroll } from './lib/motion'
+import { MODO, ScrollTrigger, startSmoothScroll } from './lib/motion'
 
 export default function App() {
   const [listo, setListo] = useState(false)
 
   useEffect(() => {
     startSmoothScroll()
+  }, [])
+
+  // Modo Gala: cada sección aparece con suavidad la primera vez que entra en pantalla
+  useEffect(() => {
+    if (MODO !== 'gala' || !('IntersectionObserver' in window)) return
+    const secciones = Array.from(document.querySelectorAll<HTMLElement>('main > section')).slice(1)
+    secciones.forEach((s) => s.classList.add('gala-espera'))
+    const io = new IntersectionObserver(
+      (entradas) =>
+        entradas.forEach((e) => {
+          if (!e.isIntersecting) return
+          e.target.classList.remove('gala-espera')
+          io.unobserve(e.target)
+        }),
+      { rootMargin: '0px 0px -12% 0px' }
+    )
+    secciones.forEach((s) => io.observe(s))
+    return () => io.disconnect()
   }, [])
 
   const alTerminar = useCallback(() => {

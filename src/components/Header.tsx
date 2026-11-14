@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import Monograma from './Monograma'
 import RollLink from './RollLink'
+import ModoSelector from './ModoSelector'
 import { SECCIONES, CONTACTO } from '../lib/data'
 import { ScrollTrigger, scrollToId, stopScroll } from '../lib/motion'
 
@@ -63,8 +64,9 @@ export default function Header() {
             {SECCIONES[indice].label}
           </span>
         </span>
-        <button
-         
+        <div className="flex items-center gap-5 justify-self-end">
+          <ModoSelector className="hidden sm:inline-flex" />
+          <button
           className="burger"
           aria-label={open ? 'Cerrar menú' : 'Abrir menú'}
           aria-expanded={open}
@@ -73,7 +75,8 @@ export default function Header() {
         >
           <i />
           <i />
-        </button>
+          </button>
+        </div>
       </header>
 
       <div id="menu" className={`menu gutter ${open ? 'open' : ''}`} aria-hidden={!open} inert={!open}>
@@ -90,7 +93,8 @@ export default function Header() {
             </RollLink>
           ))}
         </nav>
-        <div className="flex flex-wrap justify-between gap-3 pb-6 text-niebla eyebrow">
+        <div className="flex flex-wrap items-center justify-between gap-3 pb-6 text-niebla eyebrow">
+          <ModoSelector />
           <span>{CONTACTO.correo}</span>
           <span>{CONTACTO.ciudad}</span>
         </div>

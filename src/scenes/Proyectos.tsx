@@ -57,7 +57,7 @@ export default function Proyectos() {
 
       <div
         ref={track}
-        className="relative z-10 flex flex-col items-center gap-14 gutter py-28 lg:h-full lg:w-max lg:flex-row lg:items-center lg:gap-[10vw] lg:py-0 lg:pl-[8vw] lg:pr-[12vw]"
+        className="proy-carril relative z-10 flex flex-col items-center gap-14 gutter py-28 lg:h-full lg:w-max lg:flex-row lg:items-center lg:gap-[10vw] lg:py-0 lg:pl-[8vw] lg:pr-[12vw]"
       >
         <div className="proy-item grid max-w-[380px] gap-5 self-start lg:self-center">
           <span className="eyebrow text-niebla">Escena 03 · Proyectos</span>
@@ -86,7 +86,7 @@ export default function Proyectos() {
       </div>
 
       {/* Eje de ciclos */}
-      <div className="absolute inset-x-0 bottom-8 z-10 hidden gutter lg:block" aria-hidden="true">
+      <div className="eje absolute inset-x-0 bottom-8 z-10 hidden gutter lg:block" aria-hidden="true">
         <div className="relative grid grid-cols-4 border-t border-white/20 pt-3">
           {CICLOS.map((c) => (
             <span key={c} className="display text-[48px] text-white/15 [&:not(:first-child)]:border-l [&:not(:first-child)]:border-white/10 [&:not(:first-child)]:pl-3">

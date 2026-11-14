@@ -13,6 +13,42 @@ export const EASE = {
 } as const
 
 const CLAVE = 'tn-animaciones'
+const CLAVE_MODO = 'tn-modo'
+
+/** Modos de diseño: mismo contenido, distinta personalidad. */
+export const MODOS = [
+  { id: 'cine', label: 'Cine', nota: 'Con todo el movimiento' },
+  { id: 'gala', label: 'Gala', nota: 'Elegante y en calma' },
+] as const
+export type Modo = (typeof MODOS)[number]['id']
+
+const leerModo = (): Modo => {
+  try {
+    return localStorage.getItem(CLAVE_MODO) === 'gala' ? 'gala' : 'cine'
+  } catch {
+    return 'cine'
+  }
+}
+
+/** Modo con el que cargó la página. Cambiarlo recarga, igual que el botón de animaciones. */
+export const MODO: Modo = typeof window === 'undefined' ? 'cine' : leerModo()
+
+/** Guarda el modo, cubre la pantalla con un telón y recarga para vestir todas las escenas. */
+export function setModo(modo: Modo) {
+  if (modo === MODO) return
+  try {
+    localStorage.setItem(CLAVE_MODO, modo)
+  } catch {
+    return // sin almacenamiento no se puede recordar el modo
+  }
+  const telon = document.createElement('div')
+  telon.className = `telon-modo telon-${modo}`
+  document.body.appendChild(telon)
+  window.setTimeout(() => {
+    window.scrollTo(0, 0)
+    window.location.reload()
+  }, 520)
+}
 
 /** true si el sistema del visitante pide reducir animaciones. */
 export const sistemaReduce = () =>
@@ -27,7 +63,8 @@ export const animacionesForzadas = () => {
   }
 }
 
-export const prefersReducedMotion = () => sistemaReduce() && !animacionesForzadas()
+/** true cuando no debe haber movimiento: lo pide el sistema o el modo Gala, que es en calma. */
+export const prefersReducedMotion = () => MODO === 'gala' || (sistemaReduce() && !animacionesForzadas())
 
 /** Activa o vuelve a apagar las animaciones y recarga para aplicarlo en todas las escenas. */
 export function setAnimaciones(on: boolean) {
@@ -42,7 +79,9 @@ export function setAnimaciones(on: boolean) {
 }
 
 const reducir = prefersReducedMotion()
-if (typeof document !== 'undefined' && sistemaReduce() && !reducir) document.documentElement.classList.add('animar-forzado')
+// 'quieto' avisa al CSS de que no hay escenas fijas ni carriles: todo va en flujo normal
+if (typeof document !== 'undefined' && reducir) document.documentElement.classList.add('quieto')
+if (typeof document !== 'undefined' && MODO === 'cine' && sistemaReduce() && !reducir) document.documentElement.classList.add('animar-forzado')
 
 /**
  * Consultas para gsap.matchMedia que respetan el botón de animaciones.

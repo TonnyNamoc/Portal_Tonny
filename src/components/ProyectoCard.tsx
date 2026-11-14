@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import type { Proyecto } from '../lib/data'
-import { gsap } from '../lib/motion'
+import { gsap, prefersReducedMotion } from '../lib/motion'
 
 /** Tarjeta de proyecto. Toda la tarjeta abre el caso; el botón "Ver caso" lo hace accesible con teclado. */
 export default function ProyectoCard({ p, n, delay = 0, alAbrir }: { p: Proyecto; n: number; delay?: number; alAbrir: () => void }) {
@@ -9,7 +9,7 @@ export default function ProyectoCard({ p, n, delay = 0, alAbrir }: { p: Proyecto
   // Inclinación 3D que sigue al puntero
   const onMove = (e: React.PointerEvent) => {
     const el = ref.current
-    if (!el || e.pointerType !== 'mouse') return
+    if (!el || e.pointerType !== 'mouse' || prefersReducedMotion()) return
     const r = el.getBoundingClientRect()
     const x = (e.clientX - r.left) / r.width - 0.5
     const y = (e.clientY - r.top) / r.height - 0.5

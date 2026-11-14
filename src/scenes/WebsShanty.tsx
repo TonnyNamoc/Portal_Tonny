@@ -54,7 +54,7 @@ export default function WebsShanty() {
 
       <div
         ref={track}
-        className="relative z-10 flex flex-col items-center gap-14 gutter py-28 lg:absolute lg:inset-y-0 lg:right-0 lg:w-max lg:flex-row-reverse lg:items-center lg:gap-[8vw] lg:py-0 lg:pl-[12vw] lg:pr-[8vw]"
+        className="webs-carril relative z-10 flex flex-col items-center gap-14 gutter py-28 lg:absolute lg:inset-y-0 lg:right-0 lg:w-max lg:flex-row-reverse lg:items-center lg:gap-[8vw] lg:py-0 lg:pl-[12vw] lg:pr-[8vw]"
       >
         <div className="webs-item grid max-w-[400px] gap-5 self-start lg:self-center">
           <span className="eyebrow text-niebla">Escena 04 · Shanty Studios</span>
@@ -65,7 +65,7 @@ export default function WebsShanty() {
           <p className="text-niebla">
             Páginas para marcas reales, hechas junto a Shanty Studios. Están en línea: ábrelas y navégalas.
           </p>
-          <span className="mono hidden text-xs uppercase tracking-[0.2em] text-niebla lg:block" aria-hidden="true">
+          <span className="webs-pista mono hidden text-xs uppercase tracking-[0.2em] text-niebla lg:block" aria-hidden="true">
             <span style={{ color: 'var(--totora)' }}>←</span> Sigue bajando
           </span>
         </div>
@@ -116,7 +116,7 @@ export default function WebsShanty() {
       </div>
 
       {/* Barra de avance: la marca va de derecha a izquierda */}
-      <div className="absolute inset-x-0 bottom-8 z-10 hidden gutter lg:block" aria-hidden="true">
+      <div className="eje absolute inset-x-0 bottom-8 z-10 hidden gutter lg:block" aria-hidden="true">
         <div className="relative border-t border-white/20">
           <span className="webs-marca absolute -top-[5px] h-[9px] w-[9px] -translate-x-1/2 rounded-full" style={{ background: 'var(--totora)' }} />
         </div>

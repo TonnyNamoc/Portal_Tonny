@@ -64,7 +64,7 @@ export default function Habilidades() {
         </h2>
 
         {/* Escritorio: escenario con una habilidad a la vez */}
-        <div className="relative hidden h-full lg:grid grid-cols-[minmax(240px,1fr)_minmax(0,1.4fr)_auto] items-center gap-10 gutter">
+        <div className="hab-escenario relative hidden h-full lg:grid grid-cols-[minmax(240px,1fr)_minmax(0,1.4fr)_auto] items-center gap-10 gutter">
           <div className="grid gap-4 self-end pb-36">
             <span className="eyebrow text-adobe-tinta" style={{ color: 'var(--adobe-tinta)' }}>
               {h.categoria}
@@ -104,7 +104,7 @@ export default function Habilidades() {
         </div>
 
         {/* Móvil: lista */}
-        <div className="grid gap-10 gutter pb-10 pt-28 lg:hidden">
+        <div className="hab-lista grid gap-10 gutter pb-10 pt-28 lg:hidden">
           <h2 className="display text-[64px]">Habilidades</h2>
           {HABILIDADES.map((x) => (
             <div key={x.nombre} className="grid grid-cols-[72px_1fr] items-center gap-5">
@@ -121,7 +121,7 @@ export default function Habilidades() {
         </div>
 
         {/* Aprendiendo + marquee de logos */}
-        <div className="grid gap-4 pb-8 lg:absolute lg:inset-x-0 lg:bottom-0 lg:pb-6">
+        <div className="hab-extra grid gap-4 pb-8 lg:absolute lg:inset-x-0 lg:bottom-0 lg:pb-6">
           <div className="flex flex-wrap items-center gap-2 gutter">
             <span className="eyebrow mr-2" style={{ color: 'var(--adobe-tinta)' }}>
               Aprendiendo

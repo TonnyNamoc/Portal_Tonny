@@ -18,6 +18,18 @@
     <meta name="twitter:title" content="Tonny Namoc — Desarrollador de Software" />
     <meta name="twitter:description" content="Soluciones web y de datos. Proyectos, habilidades y certificados. Trujillo, Perú." />
     <meta name="twitter:image" content="https://portal-tonny-io5q.vercel.app/og.png" />
+    <script>
+      // Modo de diseño elegido: se aplica antes de pintar para que no parpadee
+      try {
+        if (localStorage.getItem('tn-modo') === 'gala') {
+          document.documentElement.dataset.modo = 'gala'
+          var f = document.createElement('link')
+          f.rel = 'stylesheet'
+          f.href = 'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap'
+          document.head.appendChild(f)
+        }
+      } catch (e) {}
+    </script>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <title>Tonny Namoc — Desarrollador de Software</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
