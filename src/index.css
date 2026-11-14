@@ -79,9 +79,12 @@ button:focus-visible {
 /* ---------- Mundos ---------- */
 .mundo-noche {
   background-color: var(--noche);
+  color: var(--cal);
+}
+/* El relieve de Chan Chan se reserva para pocos momentos: Habilidades y el cierre */
+.con-relieve {
   background-image: var(--relieve-noche);
   background-size: 96px 96px;
-  color: var(--cal);
 }
 .mundo-adobe {
   background-color: var(--adobe);
@@ -192,8 +195,6 @@ button:focus-visible {
   display: grid;
   grid-template-rows: auto 1fr auto;
   background-color: var(--noche);
-  background-image: var(--relieve-noche);
-  background-size: 96px 96px;
   clip-path: inset(0 0 100% 0);
   transition: clip-path 0.8s var(--ease-escena), visibility 0s linear 0.8s;
   visibility: hidden;
@@ -289,7 +290,7 @@ button:focus-visible {
   overflow: hidden;
   border-radius: 10px;
   background: linear-gradient(160deg, #1d2a4a 0%, #121826 70%);
-  box-shadow: inset 0 0 0 1px rgba(46, 107, 255, 0.45), 0 30px 60px rgba(0, 0, 0, 0.4);
+  box-shadow: inset 0 0 0 1px rgba(127, 166, 255, 0.22), 0 30px 60px rgba(0, 0, 0, 0.4);
   transform-style: preserve-3d;
   will-change: transform;
 }
@@ -315,29 +316,16 @@ button:focus-visible {
 .proyecto-relieve {
   position: absolute;
   inset: 0;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96'%3E%3Cpath d='M0 48h16V32h16V16h16v16h16v16h16v16H64v16H48V64H32V48H16' fill='none' stroke='%237FA6FF' stroke-opacity='.22' stroke-width='3'/%3E%3C/svg%3E") 0 0 / 96px 96px;
-  -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 62%);
-  mask-image: linear-gradient(to bottom, #000 0%, transparent 62%);
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96'%3E%3Cpath d='M0 48h16V32h16V16h16v16h16v16h16v16H64v16H48V64H32V48H16' fill='none' stroke='%237FA6FF' stroke-opacity='.12' stroke-width='3'/%3E%3C/svg%3E") 0 0 / 96px 96px;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 48%);
+  mask-image: linear-gradient(to bottom, #000 0%, transparent 48%);
   pointer-events: none;
 }
 .proyecto-num {
   font-size: 104px;
   line-height: 0.8;
   color: transparent;
-  -webkit-text-stroke: 1.5px rgba(127, 166, 255, 0.7);
-}
-/* Trozo de cinta amarilla: lo que antes cruzaba la tarjeta, ahora es una etiqueta */
-.etiqueta-cinta {
-  display: inline-block;
-  padding: 5px 9px 4px;
-  background: var(--peligro);
-  color: #111;
-  font: 900 13px/1 var(--f-display);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  transform: rotate(-2deg);
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4);
+  -webkit-text-stroke: 1.5px rgba(127, 166, 255, 0.45);
 }
 .proyecto-ver {
   justify-self: start;
@@ -347,7 +335,7 @@ button:focus-visible {
   padding: 0 0 4px;
   border: 0;
   background: none;
-  color: var(--totora);
+  color: var(--cal);
   font: 700 13px var(--f-body);
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -384,7 +372,7 @@ button:focus-visible {
   overflow-y: auto;
   overscroll-behavior: contain;
   padding: 72px clamp(22px, 4vw, 44px) 40px;
-  background: var(--noche-2) var(--relieve-noche);
+  background: var(--noche-2);
   color: var(--cal);
   box-shadow: -1px 0 0 rgba(243, 238, 230, 0.1), -40px 0 80px rgba(0, 0, 0, 0.5);
   outline: none;
@@ -646,6 +634,16 @@ button:focus-visible {
   border-radius: 4px;
   background: rgba(46, 107, 255, 0.25);
   color: var(--pacifico-claro);
+}
+
+/* El terminal se abre con teclado; en pantallas pequeñas el botón tapaba contenido */
+@media (max-width: 1023px) {
+  .terminal-btn:not(.animaciones-btn) {
+    display: none;
+  }
+  .terminal-btn.animaciones-btn {
+    bottom: max(20px, env(safe-area-inset-bottom, 0px));
+  }
 }
 
 /* Botón para activar animaciones cuando el sistema las reduce */

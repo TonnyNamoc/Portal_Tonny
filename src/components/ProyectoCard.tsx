@@ -31,7 +31,6 @@ export default function ProyectoCard({ p, n, delay = 0, alAbrir }: { p: Proyecto
           <span className="proyecto-num display" aria-hidden="true">
             {String(n).padStart(2, '0')}
           </span>
-          {p.codigoPrivado && <span className="etiqueta-cinta">Código privado</span>}
         </div>
         <div className="relative z-[3] grid gap-3">
           <span className="eyebrow" style={{ color: 'var(--pacifico-claro)' }}>

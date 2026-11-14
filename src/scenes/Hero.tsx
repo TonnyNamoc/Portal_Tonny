@@ -109,7 +109,7 @@ export default function Hero({ listo }: { listo: boolean }) {
     <section id="inicio" ref={root} className="mundo-noche relative h-[100svh] min-h-[560px] overflow-hidden">
       {/* Nombre detrás de la foto */}
       <h1 className="display absolute inset-x-0 top-[30%] text-center leading-[0.8] text-cal text-[19vw] max-sm:top-[24%] max-sm:text-[33vw]">
-        <span className="sr-only">Tonny Namoc</span>
+        <span className="sr-only">Tonny Namoc, desarrollador web y de software</span>
         <span aria-hidden="true" className="flex justify-center gap-[0.12em] max-sm:flex-col max-sm:gap-0">
           {['Tonny', 'Namoc'].map((p) => (
             <span key={p} className="inline-flex justify-center overflow-hidden">

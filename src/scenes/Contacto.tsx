@@ -3,7 +3,6 @@ import { Candado } from '../components/SalaEdicion'
 import Monograma from '../components/Monograma'
 import RollLink from '../components/RollLink'
 import { CONTACTO, SECCIONES } from '../lib/data'
-import LogoMarquee from '../components/LogoMarquee'
 import { gsap, scrollToId, MOV } from '../lib/motion'
 
 function Copiable({ valor, etiqueta }: { valor: string; etiqueta: string }) {
@@ -55,7 +54,7 @@ export default function Contacto() {
   const palabra = 'Hablemos'
 
   return (
-    <section id="contacto" ref={root} className="mundo-noche wipe-in relative min-h-[100svh] overflow-hidden">
+    <section id="contacto" ref={root} className="mundo-noche con-relieve wipe-in relative min-h-[100svh] overflow-hidden">
       <div className="grid min-h-[100svh] gap-8 gutter pb-10 pt-24 lg:pt-10 lg:grid-cols-[260px_1fr]">
         {/* Panel lateral flotante */}
         <aside className="panel-flota hidden lg:grid content-between rounded-[10px] bg-[var(--noche-2)] p-6 shadow-[0_30px_60px_rgba(0,0,0,0.4)]" style={{ background: 'var(--noche-2)' }}>
@@ -133,7 +132,6 @@ export default function Contacto() {
         </div>
       </div>
 
-      <LogoMarquee reverse className="border-t border-white/10 py-5" imgClassName="h-7 opacity-40 grayscale" />
     </section>
   )
 }

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://portal-tonny-io5q.vercel.app/sitemap.xml
