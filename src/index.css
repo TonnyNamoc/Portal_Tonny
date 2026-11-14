@@ -1463,3 +1463,7 @@ html.quieto :is(.flotar, .marquee-track, .panel-flota, .scroll-hint) {
 [data-modo='gala'] .cert-controles .btn-ghost:hover {
   color: var(--cal);
 }
+/* En Gala los lentes van lisos, sin el video de código */
+[data-modo='gala'] .hero-lente {
+  display: none;
+}
