@@ -1407,3 +1407,31 @@ html.quieto :is(.flotar, .marquee-track, .panel-flota, .scroll-hint) {
 [data-modo='gala'] .menu .roll {
   color: rgb(var(--cal-rgb) / 0.35);
 }
+
+/* ---------- Gala: certificados en círculo completo ---------- */
+/* Sin dial, sin sombras y sin texto alrededor: solo las tarjetas y, al centro, el nombre */
+[data-modo='gala'] .cert-dial,
+[data-modo='gala'] .cert-marca,
+[data-modo='gala'] .cert-datos {
+  display: none;
+}
+[data-modo='gala'] .cert-carta {
+  border-radius: 4px;
+  box-shadow: 0 0 0 1px rgb(var(--cal-rgb) / 0.14);
+  opacity: 0.45;
+  transition: opacity 0.5s var(--ease-ui);
+}
+[data-modo='gala'] .cert-carta.es-activa,
+[data-modo='gala'] .cert-carta:hover {
+  opacity: 1;
+}
+[data-modo='gala'] .cert-info {
+  inset: 0;
+  align-content: center;
+  padding-inline: 0;
+}
+[data-modo='gala'] .cert-titulo {
+  max-width: min(15ch, calc(var(--R) * 2 - var(--ch) - 40px));
+  font-size: clamp(17px, calc(var(--R) * 0.115), 36px);
+  line-height: 1.05;
+}

@@ -1,10 +1,12 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import Panel from '../components/Panel'
 import { CERTIFICADOS } from '../lib/data'
-import { gsap, prefersReducedMotion, ScrollTrigger, MOV } from '../lib/motion'
+import { gsap, prefersReducedMotion, ScrollTrigger, MOV, MODO } from '../lib/motion'
 
+// En Gala la rueda es un círculo completo y limpio, a la vista entera
+const CIRCULO = MODO === 'gala'
 // La rueda repite los certificados para llenar el círculo
-const VUELTAS = 3
+const VUELTAS = CIRCULO ? 2 : 3
 const RANURAS = CERTIFICADOS.length * VUELTAS
 const PASO = 360 / RANURAS
 const BASE = -2.5 // grados por segundo cuando gira sola (una tarjeta cada ~12 s)
@@ -25,18 +27,32 @@ export default function Certificados() {
   const totalHoras = CERTIFICADOS.reduce((t, c) => t + c.horas, 0)
 
   // Estado de la rueda fuera de React para no re-renderizar en cada cuadro
-  const giro = useRef({ angulo: 0, vel: BASE, arrastrando: false, movido: 0, visible: false, auto: true, encima: false, abierto: false })
+  const giro = useRef({ angulo: 0, vel: BASE, arrastrando: false, movido: 0, visible: false, auto: true, encima: false, abierto: false, ranura: -1, aplicar: () => {} })
   giro.current.abierto = ver !== null
 
   // Medidas según el ancho de pantalla
   useLayoutEffect(() => {
     const medir = () => {
       const vw = window.innerWidth
+      const el = escenario.current!
+      if (CIRCULO) {
+        // Círculo completo: el diámetro más una tarjeta tiene que caber en la pantalla
+        const prop = vw < 640 ? 0.56 : 0.62
+        const R = Math.min((vw - 32) / (2 + prop), (window.innerHeight * 0.8) / (2 + prop * (612 / 792)), 330)
+        const cw = R * prop
+        const ch = cw * (612 / 792)
+        const alto = 2 * R + ch + 32
+        el.style.setProperty('--R', `${R}px`)
+        el.style.setProperty('--cw', `${cw}px`)
+        el.style.setProperty('--ch', `${ch}px`)
+        el.style.height = `${alto}px`
+        el.style.setProperty('--cy', `${alto / 2}px`)
+        return
+      }
       const R = vw < 640 ? vw * 0.95 : Math.min(vw * 0.5, 720)
       const cw = vw < 640 ? Math.min(R * 0.5, 200) : R * 0.4
       const ch = cw * (612 / 792)
       const alto = R * 0.78 + ch / 2 + 48
-      const el = escenario.current!
       el.style.setProperty('--R', `${R}px`)
       el.style.setProperty('--cw', `${cw}px`)
       el.style.setProperty('--ch', `${ch}px`)
@@ -58,9 +74,17 @@ export default function Certificados() {
     const aplicar = () => {
       rueda.current!.style.transform = `rotate(${g.angulo}deg)`
       dial.current!.style.transform = `rotate(${-g.angulo * 0.5}deg)`
-      const i = (((Math.round(-g.angulo / PASO) % RANURAS) + RANURAS) % RANURAS) % CERTIFICADOS.length
+      const ranura = ((Math.round(-g.angulo / PASO) % RANURAS) + RANURAS) % RANURAS
+      if (ranura !== g.ranura) {
+        // La tarjeta de arriba queda marcada para poder resaltarla
+        rueda.current!.children[g.ranura]?.classList.remove('es-activa')
+        rueda.current!.children[ranura]?.classList.add('es-activa')
+        g.ranura = ranura
+      }
+      const i = ranura % CERTIFICADOS.length
       setActivo((a) => (a === i ? a : i))
     }
+    g.aplicar = aplicar
 
     const tick = (_t: number, dt: number) => {
       if (!g.visible || g.arrastrando || g.abierto) return
@@ -170,12 +194,7 @@ export default function Certificados() {
       angulo: destino,
       duration: 1.2,
       ease: 'power3.inOut',
-      onUpdate: () => {
-        rueda.current!.style.transform = `rotate(${g.angulo}deg)`
-        dial.current!.style.transform = `rotate(${-g.angulo * 0.5}deg)`
-        const i = (((Math.round(-g.angulo / PASO) % RANURAS) + RANURAS) % RANURAS) % CERTIFICADOS.length
-        setActivo(i)
-      },
+      onUpdate: () => g.aplicar(),
       onComplete: () => {
         g.arrastrando = false
         g.vel = 0
@@ -288,14 +307,14 @@ export default function Certificados() {
         </div>
 
         {/* Marca ▲ y datos del certificado de arriba */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-5 z-10 grid justify-items-center gap-2 gutter text-center">
-          <span className="text-[11px]" style={{ color: 'var(--totora)' }}>
+        <div className="cert-info pointer-events-none absolute inset-x-0 bottom-5 z-10 grid justify-items-center gap-2 gutter text-center">
+          <span className="cert-marca text-[11px]" style={{ color: 'var(--totora)' }}>
             ▲
           </span>
           <p key={activo} className="cert-titulo display max-w-[24ch] text-[clamp(22px,2.6vw,34px)] leading-none text-cal">
             {c.titulo}
           </p>
-          <p className="mono text-[11px] uppercase tracking-[0.14em] text-niebla">
+          <p className="cert-datos mono text-[11px] uppercase tracking-[0.14em] text-niebla">
             {c.emisor} · {c.modalidad} · {c.fecha} · {c.horas} h
           </p>
         </div>
