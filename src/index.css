@@ -711,6 +711,11 @@ button:focus-visible {
   background: linear-gradient(to top, rgba(14, 18, 24, 0.97) 0%, rgba(14, 18, 24, 0.93) 58%, transparent 100%);
 }
 
+/* Dial de la rueda de certificados */
+.cert-dial {
+  box-shadow: inset 0 1px 0 rgb(var(--cal-rgb) / 0.08), 0 -20px 60px rgba(0, 0, 0, 0.5);
+}
+
 /* Certificado en grande */
 .cert-grande {
   display: block;
@@ -1051,7 +1056,7 @@ button:focus-visible {
   animation: telon-modo 0.5s var(--ease-escena) both;
 }
 .telon-gala {
-  background: #0a0a0b;
+  background: #f5f0e7;
 }
 @keyframes telon-modo {
   from {
@@ -1063,26 +1068,42 @@ button:focus-visible {
 }
 
 /* ================================================================
-   Modo Gala — etiqueta negra
-   Negro y marfil, serifa de alto contraste, líneas finas y calma.
+   Modo Gala — papel marfil
+   Marfil y tinta, serifa de alto contraste, líneas finas y calma.
+   Los nombres se conservan (noche = fondo, cal = texto), solo cambia la polaridad:
+   el fondo pasa a claro y el mundo "adobe" queda como franja de tinta.
    ================================================================ */
 html[data-modo='gala'] {
-  --noche-rgb: 10 10 11;
-  --noche-2-rgb: 22 21 23;
-  --adobe-rgb: 240 233 221;
-  --adobe-sombra-rgb: 196 186 168;
-  --adobe-tinta-rgb: 82 76 66;
-  --cal-rgb: 244 239 230;
-  --niebla-rgb: 158 152 141;
-  --pacifico-rgb: 196 164 108;
-  --pacifico-claro-rgb: 217 194 154;
-  --totora-rgb: 244 239 230;
-  --peligro-rgb: 196 164 108;
+  --noche-rgb: 245 240 231;
+  --noche-2-rgb: 235 228 215;
+  --adobe-rgb: 23 21 19;
+  --adobe-sombra-rgb: 150 140 122;
+  --adobe-tinta-rgb: 212 204 189;
+  --cal-rgb: 26 23 20;
+  --niebla-rgb: 110 102 90;
+  --pacifico-rgb: 140 105 46;
+  --pacifico-claro-rgb: 140 105 46;
+  --totora-rgb: 26 23 20;
+  --peligro-rgb: 140 105 46;
+  color-scheme: light;
 
   --f-display: 'Cormorant Garamond', 'Iowan Old Style', 'Times New Roman', serif;
   --relieve: none;
   --relieve-noche: none;
   --oro: rgb(var(--pacifico-rgb));
+  --oro-claro: #c4a46c;
+}
+/* La cabecera usa mezcla "difference": en blanco se lee oscura sobre el marfil y clara sobre la tinta */
+[data-modo='gala'] .header {
+  color: #fff;
+}
+/* Franja de tinta: el dorado y los grises se aclaran para leerse sobre oscuro */
+[data-modo='gala'] .mundo-adobe {
+  --oro: var(--oro-claro);
+  --pacifico-rgb: 196 164 108;
+  --pacifico: var(--oro-claro);
+  --pacifico-claro-rgb: 217 194 154;
+  --pacifico-claro: rgb(217 194 154);
 }
 
 [data-modo='gala'] .display {
@@ -1122,6 +1143,9 @@ html[data-modo='gala'] {
 [data-modo='gala'] .mundo-adobe .btn {
   background: var(--noche);
   color: var(--cal);
+}
+[data-modo='gala'] .btn:hover {
+  color: #fff;
 }
 
 /* Lo que es juego se guarda para los otros modos */
@@ -1314,4 +1338,72 @@ html.quieto :is(.flotar, .marquee-track, .panel-flota, .scroll-hint) {
 [data-modo='gala'] .proyecto {
   aspect-ratio: auto;
   gap: 44px;
+}
+
+/* ---------- Gala: papel claro ---------- */
+/* El nombre va por delante y se invierte al cruzar la silueta */
+[data-modo='gala'] #inicio h1 {
+  z-index: 5;
+  color: #fff;
+  mix-blend-mode: difference;
+  pointer-events: none;
+}
+@media (min-width: 640px) {
+  [data-modo='gala'] #inicio h1 {
+    font-size: 16.5vw;
+  }
+}
+[data-modo='gala'] .hero-firma {
+  background: linear-gradient(to top, rgb(var(--noche-rgb) / 0.97) 0%, rgb(var(--noche-rgb) / 0.93) 58%, transparent 100%);
+}
+[data-modo='gala'] .linea-contenedor {
+  opacity: 0.55;
+}
+/* Fichas de Sobre mí: tarjetas de papel sobre la franja de tinta */
+[data-modo='gala'] .ficha {
+  --adobe-tinta-rgb: var(--niebla-rgb);
+  --adobe-tinta: rgb(var(--niebla-rgb));
+  border-radius: 0;
+  background: rgb(var(--noche-rgb));
+  color: rgb(var(--cal-rgb));
+}
+[data-modo='gala'] .mundo-adobe :is(.hab-lista img, .logo-mono) {
+  filter: grayscale(1) invert(1) contrast(1.05);
+  opacity: 0.8;
+}
+[data-modo='gala'] .cert-dial {
+  --dial-luz: #fbf8f2;
+  box-shadow: inset 0 0 0 1px rgb(var(--cal-rgb) / 0.12), 0 -24px 60px rgb(60 48 30 / 0.12);
+}
+[data-modo='gala'] .disponible {
+  box-shadow: inset 0 0 0 1px rgb(var(--cal-rgb) / 0.25);
+  background: none;
+}
+/* Líneas y velos que en Cine van en blanco translúcido pasan a tinta */
+[data-modo='gala'] :is(main, .panel, .menu) :is(.border-white\/10, .border-white\/20) {
+  border-color: rgb(var(--cal-rgb) / 0.16);
+}
+[data-modo='gala'] :is(main, .panel, .menu) :is(.bg-white\/10, .bg-white\/25) {
+  background-color: rgb(var(--cal-rgb) / 0.12);
+}
+[data-modo='gala'] main .text-white\/15 {
+  color: rgb(var(--cal-rgb) / 0.18);
+}
+[data-modo='gala'] main .text-white\/40 {
+  color: rgb(var(--cal-rgb) / 0.45);
+}
+[data-modo='gala'] .panel-caja {
+  box-shadow: -1px 0 0 rgb(var(--cal-rgb) / 0.12), -40px 0 80px rgb(60 48 30 / 0.18);
+}
+[data-modo='gala'] .panel-centro .panel-caja {
+  box-shadow: inset 0 0 0 1px rgb(var(--cal-rgb) / 0.12), 0 40px 90px rgb(60 48 30 / 0.25);
+}
+[data-modo='gala'] :is(.panel-cerrar, .caso-nota) {
+  background: rgb(var(--cal-rgb) / 0.06);
+}
+[data-modo='gala'] .panel-cerrar:hover {
+  background: rgb(var(--cal-rgb) / 0.14);
+}
+[data-modo='gala'] .menu .roll {
+  color: rgb(var(--cal-rgb) / 0.35);
 }

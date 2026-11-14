@@ -262,14 +262,13 @@ export default function Certificados() {
 
           {/* Dial con texto circular */}
           <div
-            className="absolute rounded-full"
+            className="cert-dial absolute rounded-full"
             style={{
               width: 'calc(var(--R) * 1.12)',
               height: 'calc(var(--R) * 1.12)',
               left: 'calc(var(--R) * -0.56)',
               top: 'calc(var(--R) * -0.56)',
-              background: 'radial-gradient(circle at 50% 30%, #222a37, var(--noche-2) 60%)',
-              boxShadow: 'inset 0 1px 0 rgba(243,238,230,0.08), 0 -20px 60px rgba(0,0,0,0.5)',
+              background: 'radial-gradient(circle at 50% 30%, var(--dial-luz, #222a37), var(--noche-2) 60%)',
             }}
           >
             <div ref={dial} className="absolute inset-0">
