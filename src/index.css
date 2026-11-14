@@ -1463,7 +1463,50 @@ html.quieto :is(.flotar, .marquee-track, .panel-flota, .scroll-hint) {
 [data-modo='gala'] .cert-controles .btn-ghost:hover {
   color: var(--cal);
 }
-/* En Gala los lentes van lisos, sin el video de código */
-[data-modo='gala'] .hero-lente {
+/* En Gala los lentes van sin el video de código: cristal negro con un destello dorado que cruza despacio */
+[data-modo='gala'] .hero-lente > * {
   display: none;
+}
+[data-modo='gala'] .hero-lente {
+  background-color: #0b0a09;
+  background-image: linear-gradient(112deg, transparent 48.4%, rgb(196 164 108 / 0.18) 49.3%, rgb(236 214 170 / 0.6) 50%, rgb(196 164 108 / 0.18) 50.7%, transparent 51.6%);
+  background-size: 260% 100%;
+  background-repeat: no-repeat;
+  /* La banda queda justo fuera de los lentes; la animación la hace cruzarlos */
+  background-position: 60% 0;
+  animation: lente-destello 6s var(--ease-ui) 1s infinite;
+}
+@keyframes lente-destello {
+  0% {
+    background-position: 60% 0;
+  }
+  30%,
+  100% {
+    background-position: 42% 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-modo='gala'] .hero-lente {
+    animation: none;
+  }
+}
+[data-modo='gala'] .hero-rol {
+  display: grid;
+  top: 64%;
+  color: #e8d9bd;
+  font-size: clamp(20px, 2.1vw, 32px);
+  letter-spacing: 0;
+}
+[data-modo='gala'] .hero-rol-linea {
+  background: #c4a46c;
+}
+@media (max-width: 639px) {
+  [data-modo='gala'] .hero-rol {
+    top: 70%;
+  }
+}
+/* El aviso de scroll cae sobre la silueta en móvil: se invierte igual que el nombre */
+[data-modo='gala'] .scroll-hint-wrap {
+  color: #fff;
+  mix-blend-mode: difference;
 }

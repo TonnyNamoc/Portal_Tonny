@@ -173,6 +173,12 @@ export default function Hero({ listo }: { listo: boolean }) {
         <div className="absolute inset-0" style={{ background: 'linear-gradient(160deg, rgba(255,255,255,0.08), rgba(14,18,24,0.25) 45%)' }} />
       </div>
 
+      {/* Solo en Gala: el oficio en cursiva sobre la silueta */}
+      <p className="hero-rol pointer-events-none absolute inset-x-0 z-[6] hidden justify-items-center gap-4 text-center" aria-hidden="true">
+        <span className="hero-rol-linea block h-px w-14" />
+        <span className="display italic">Desarrollador de software</span>
+      </p>
+
       {/* Firma: quién soy desde el primer segundo, antes de que la cámara se aleje */}
       <div className="hero-firma pointer-events-none absolute inset-x-0 bottom-0 z-20 grid gap-2 gutter pb-24 pt-40" aria-hidden="true">
         <span className="eyebrow" style={{ color: 'var(--totora)' }}>
